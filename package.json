@@ -1,16 +1,13 @@
 {
   "name": "browser-bunyan",
   "version": "0.0.1",
-  "description": "a fork of Bunyan specifically for thw browser via Browserify",
-  "author": "Trent Mick <trentm@gmail.com> (http://trentm.com)",
+  "description": "A fork of Bunyan specifically for the browser",
+  "author": "Phil Mander <philip.mander@gmail.com>",
   "main": "./lib/bunyan.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/philmander/browser-bunyan.git"
   },
-  "engines": [
-    "node >=0.8.0"
-  ],
   "keywords": [
     "log",
     "logging",
@@ -18,9 +15,6 @@
     "json",
     "bunyan"
   ],
-  "scripts": {
-    "test": "make test"
-  },
   "devDependencies": {
     "browserify": "^9.0.4",
     "del": "^1.1.1",
