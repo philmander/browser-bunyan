@@ -1,35 +1,33 @@
 {
-  "name": "bunyan",
-  "version": "1.3.5",
-  "description": "a JSON logging library for node.js services",
+  "name": "browser-bunyan",
+  "version": "0.0.1",
+  "description": "a fork of Bunyan specifically for thw browser via Browserify",
   "author": "Trent Mick <trentm@gmail.com> (http://trentm.com)",
   "main": "./lib/bunyan.js",
-  "bin": {
-    "bunyan": "./bin/bunyan"
-  },
-
   "repository": {
     "type": "git",
-    "url": "git://github.com/trentm/node-bunyan.git"
+    "url": "git://github.com/philmander/browser-bunyan.git"
   },
-  "engines": ["node >=0.8.0"],
-  "keywords": ["log", "logging", "log4j", "json", "bunyan"],
-
-  "// comment1": "'dtrace-provider' required for dtrace features",
-  "// comment2": "'mv' required for RotatingFileStream",
-  "optionalDependencies": {
-    "dtrace-provider": "~0.4",
-    "mv": "~2",
-    "safe-json-stringify": "~1"
-  },
-  "devDependencies": {
-    "nodeunit": "0.9.*",
-    "ben": "0.0.0",
-    "verror": "1.3.3",
-    "vasync": "1.4.3"
-  },
-
+  "engines": [
+    "node >=0.8.0"
+  ],
+  "keywords": [
+    "log",
+    "logging",
+    "log4j",
+    "json",
+    "bunyan"
+  ],
   "scripts": {
     "test": "make test"
+  },
+  "devDependencies": {
+    "browserify": "^9.0.4",
+    "del": "^1.1.1",
+    "gulp": "^3.8.11",
+    "gulp-jshint": "^1.10.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.1.0",
+    "vinyl-source-stream": "^1.1.0"
   }
 }
