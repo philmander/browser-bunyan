@@ -139,8 +139,10 @@ ConsoleFormattedStream.prototype.write = function (rec) {
     } else if (rec.level < ERROR) {
         levelCss = 'color: Purple';
     } else {
-        levelCss = 'color: Red';
+        levelCss = 'color: Crimson';
     }
+
+    var loggerName = rec.childName ? rec.name + '/' + rec.childName : rec.name;
 
     //get level name and pad start with spacs
     var levelName = nameFromLevel[rec.level].toUpperCase();
@@ -154,10 +156,9 @@ ConsoleFormattedStream.prototype.write = function (rec) {
         padZeros(rec.time.getHours(), 2), padZeros(rec.time.getMinutes(), 2),
         padZeros(rec.time.getSeconds(), 2), padZeros(rec.time.getMilliseconds(), 4),
         levelCss, levelName,
-        defaultCss, rec.name,
+        defaultCss, loggerName,
         msgCss, rec.msg);
 };
-
 
 //---- Levels
 

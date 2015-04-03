@@ -1,6 +1,6 @@
 {
   "name": "browser-bunyan",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A fork of Bunyan specifically for the browser",
   "author": "Phil Mander <philip.mander@gmail.com>",
   "main": "./lib/bunyan.js",
