@@ -1,3 +1,25 @@
+I created this project because i wanted a version of the, awesome logging framework, Bunyan specifically for the 
+browser. Although Bunyan does support being browserified, it is still a bit bloated in the browser with 
+features which aren't relevant in the browser.
+
+The code also contains a dedicated browser console stream. Use it like this:
+
+```javascript
+var bunyan = require('./lib/bunyan');
+var log = bunyan.createLogger({
+    name: 'play',
+    streams: [
+        {
+            level: 'info',
+            stream: bunyan.ConsoleFormattedStream
+            type: 'raw'
+        }
+    ]
+});
+
+log.info('hi on info');
+```
+
 Docs are the Bunyan docs at time of forking, with the documentation for the stripped features also removed:
 
 =====================================
@@ -35,7 +57,7 @@ browser](https://groups.google.com/forum/?fromgroups#!forum/bunyan-logging).
 
 # Installation
 
-    npm install bunyan
+    npm install browser-bunyan
 
 **Tip**: The `bunyan` CLI tool is written to be compatible (within reason) with
 all versions of Bunyan logs. Therefore you might want to `npm install -g bunyan`
