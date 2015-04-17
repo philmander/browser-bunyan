@@ -22,7 +22,7 @@ gulp.task('lint', function() {
 gulp.task('package', [ 'lint', 'clean' ], function() {
     return browserify({
         entries: './lib/bunyan.js',
-        standalone: 'browserBunyan'
+        standalone: 'bunyan'
     })
         .bundle()
         .pipe(vinylStream('browser-bunyan.js'))
