@@ -411,12 +411,8 @@ Logger.prototype.addStream = function addStream(s, defaultLevel) {
     s = objCopy(s);
 
     // Implicit 'type' from other args.
-    if (!s.type) {
-        if (s.stream) {
-            s.type = 'stream';
-        } else if (s.path) {
-            s.type = 'file';
-        }
+    if (!s.type && s.stream) {
+        s.type = 'raw';
     }
     s.raw = (s.type === 'raw');  // PERF: Allow for faster check in `_emit`.
 
