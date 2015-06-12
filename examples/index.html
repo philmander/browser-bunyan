@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset='utf-8'>
     <title>Browser Bunyan Examples</title>
     <script src="../dist/browser-bunyan.js"></script>
 </head>
 <body>
     <h1>Browser Bunyan examples</h1>
+    <p>Look in your console to see this code run</p>:
     <div style="font-family: Consolas, 'courier new', monospace; font-size: 10px"><pre id="codeHolder"></pre></div>
-    <p>Look in your console to see this code run</p>
+
     <script id="code">
 
         var rawLogger = bunyan.createLogger({
@@ -49,8 +51,8 @@
     </script>
     <script>
         (function() {
-            var code = document.getElementById('code').innerText;
-            document.getElementById('codeHolder').innerText = code;
+            var code = document.getElementById('code').innerHTML;
+            document.getElementById('codeHolder').innerHTML = code;
         })();
     </script>
 </body>
