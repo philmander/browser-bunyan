@@ -159,8 +159,10 @@ ConsoleFormattedStream.prototype.write = function (rec) {
             levelCss = 'color: DarkTurquoise';
         } else if (rec.level < ERROR) {
             levelCss = 'color: Purple';
-        } else {
+        } else if (rec.level < FATAL) {
             levelCss = 'color: Crimson';
+        } else {
+            levelCss = 'color: Black';
         }
 
         console.log('[%s:%s:%s:%s] %c%s%c: %s: %c%s',

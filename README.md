@@ -11,7 +11,7 @@ var log = bunyan.createLogger({
     streams: [
         {
             level: 'info',
-            stream: bunyan.ConsoleFormattedStream
+            stream: new bunyan.ConsoleFormattedStream()
             type: 'raw'
         }
     ]
