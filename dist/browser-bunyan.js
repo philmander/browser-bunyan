@@ -1,5 +1,5 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.bunyan = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-(function (process){
+(function (process,global){
 /**
  * !This is a stripped down version of Bunyan targeted specifically for the browser
  *
@@ -112,12 +112,18 @@ var _warned = {};
 
 function consoleStylingSupported() {
 
-    //doesn't detect versions, assumes newer versions are being used
-    var isOpera = !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
-    var isFirefox = typeof InstallTrigger !== 'undefined';   // Firefox 1.0+
-    var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0;
-    var isChrome = !!window.chrome && !isOpera;
-    return isOpera || isFirefox || isSafari || isChrome;
+    var supported = false;
+    try {
+        //doesn't detect versions, assumes newer versions are being used
+        var isOpera = !!global.opera ||global.navigator.userAgent.indexOf(' OPR/') >= 0;
+        var isFirefox = typeof InstallTrigger !== 'undefined';   // Firefox 1.0+
+        var isSafari = Object.prototype.toString.call(global.HTMLElement).indexOf('Constructor') > 0;
+        var isChrome = !!global.chrome && !isOpera;
+        supported =  isOpera || isFirefox || isSafari || isChrome;
+    } catch(e) {
+        supported = false;
+    }
+    return supported;
 }
 var useConsoleStyling = consoleStylingSupported();
 
@@ -906,7 +912,7 @@ module.exports.safeCycles = safeCycles;
 //streams
 module.exports.ConsoleFormattedStream = ConsoleFormattedStream;
 module.exports.ConsoleRawStream = ConsoleRawStream;
-}).call(this,require('_process'))
+}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"_process":4,"events":2,"util":6}],2:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
