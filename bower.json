@@ -1,0 +1,30 @@
+{
+  "name": "browser-bunyan",
+  "version": "0.2.2",
+  "homepage": "https://github.com/philmander/browser-bunyan",
+  "authors": [
+    "Phil Mander <philip.mander@gmail.com>"
+  ],
+  "description": "A fork of Bunyan specifically for the browser",
+  "main": "./dist/browser-bunyan.min.js",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "log",
+    "logging",
+    "log4j",
+    "json",
+    "bunyan"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

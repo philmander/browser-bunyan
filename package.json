@@ -1,6 +1,6 @@
 {
   "name": "browser-bunyan",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A fork of Bunyan specifically for the browser",
   "author": "Phil Mander <philip.mander@gmail.com>",
   "main": "./lib/bunyan.js",
@@ -19,9 +19,16 @@
     "browserify": "^9.0.4",
     "del": "^1.1.1",
     "gulp": "^3.8.11",
+    "gulp-insert": "^0.5.0",
     "gulp-jshint": "^1.10.0",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.1.0",
     "vinyl-source-stream": "^1.1.0"
-  }
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/philmander/browser-bunyan/blob/master/LICENSE.txt"
+    }
+  ]
 }
