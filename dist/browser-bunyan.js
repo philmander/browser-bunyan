@@ -156,6 +156,10 @@ ConsoleRawStream.prototype.write = function (rec) {
     } else {
         console.error(rec);
     }
+
+    if(rec.err && rec.err.stack) {
+        console.error(rec.err.stack);
+    }
 };
 
 function ConsoleFormattedStream() {}
@@ -193,6 +197,9 @@ ConsoleFormattedStream.prototype.write = function (rec) {
         levelCss, levelName,
         defaultCss, loggerName,
         msgCss, rec.msg);
+    if(rec.err && rec.err.stack) {
+        console.log('%c%s,', levelCss, rec.err.stack);
+    }
 };
 
 //---- Levels

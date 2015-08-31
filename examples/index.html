@@ -23,12 +23,16 @@
             ]
         });
 
-        rawLogger.trace('This is a %s log with a %s stream', 'trace', 'raw');
-        rawLogger.debug('This is a %s log with a %s stream', 'debug', 'raw');
-        rawLogger.info('This is an %s log with a %s stream', 'info', 'raw');
-        rawLogger.warn('This is a %s log with a %s stream', 'warn', 'raw');
-        rawLogger.error('This is a %s log with a %s stream', 'error', 'raw');
-        rawLogger.fatal('This is a %s log with a %s stream', 'fatal', 'raw');
+        var err = new Error('Example Error');
+
+        rawLogger.trace('This is a %s log using a %s stream', 'trace', 'raw');
+        rawLogger.debug('This is a %s log using a %s stream', 'debug', 'raw');
+        rawLogger.info('This is an %s log using a %s stream', 'info', 'raw');
+        rawLogger.warn('This is a %s log using a %s stream', 'warn', 'raw');
+        rawLogger.error('This is an %s log using a %s stream', 'error', 'raw');
+        rawLogger.fatal('This is a %s log using a %s stream', 'fatal', 'raw');
+        rawLogger.error(err, 'This is an %s log with an error object using a %s stream', 'error', 'raw');
+        rawLogger.fatal(err, 'This is a %s log with an error object using a %s stream', 'fatal', 'raw');
 
         var formattedLogger = bunyan.createLogger({
             name: 'formatted',
@@ -41,12 +45,14 @@
             ]
         });
 
-        formattedLogger.trace('This is a %s log with a %s stream', 'trace', 'formatted');
-        formattedLogger.debug('This is a %s log with a %s stream', 'debug', 'formatted');
-        formattedLogger.info('This is an %s log with a %s stream', 'info', 'formatted');
-        formattedLogger.warn('This is a %s log with a %s stream', 'warn', 'formatted');
-        formattedLogger.error('This is a %s log with a %s stream', 'error', 'formatted');
-        formattedLogger.fatal('This is a %s log with a %s stream', 'fatal', 'formatted');
+        formattedLogger.trace('This is a %s log using a %s stream', 'trace', 'formatted');
+        formattedLogger.debug('This is a %s log using a %s stream', 'debug', 'formatted');
+        formattedLogger.info('This is an %s log using a %s stream', 'info', 'formatted');
+        formattedLogger.warn('This is a %s log using a %s stream', 'warn', 'formatted');
+        formattedLogger.error('This is a %s log using a %s stream', 'error', 'formatted');
+        formattedLogger.fatal('This is a %s log using a %s stream', 'fatal', 'formatted');
+        formattedLogger.error(err, 'This is an %s log with an error object using a %s stream', 'error', 'raw');
+        formattedLogger.fatal(err, 'This is a %s log  with an error object using a %s stream', 'fatal', 'raw');
 
     </script>
     <script>
