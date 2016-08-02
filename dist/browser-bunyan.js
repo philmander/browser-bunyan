@@ -12,7 +12,7 @@
  * -*- mode: js -*-
  * vim: expandtab:ts=4:sw=4
  */
-
+    
 'use strict';
 
 var VERSION = '0.2.3';
@@ -227,7 +227,6 @@ Object.keys(levelFromName).forEach(function (name) {
     nameFromLevel[levelFromName[name]] = name;
 });
 
-
 /**
  * Resolve a level number, name (upper or lowercase) to a level number value.
  *
@@ -237,7 +236,6 @@ function resolveLevel(nameOrNum) {
     var level = (typeof (nameOrNum) === 'string' ? levelFromName[nameOrNum.toLowerCase()] : nameOrNum);
     return level;
 }
-
 
 //---- Logger class
 
@@ -771,16 +769,18 @@ function mkLogEmitter(minLevel) {
             }
             // Get call source info
             if (log.src && !rec.src) {
-                var src = extractSrcFromStacktrace(new Error(CALL_STACK_ERROR).stack, 2);
-                if(!src) {
-                    if(!_haveWarned('src')) {
+                try {
+                    //need to throw the error so there is a stack in IE		 	
+                    throw new Error(CALL_STACK_ERROR);
+                } catch(err) {
+                    var src = extractSrcFromStacktrace(err.stack, 2);
+                    if(!src && !_haveWarned('src')) {
                         _warn('Unable to determine src line info', 'src');    
                     }
+                    rec.src = src || '';
                 }
-                rec.src = src || '';
             }
             rec.v = LOG_VERSION;
-
             return rec;
         }
 
