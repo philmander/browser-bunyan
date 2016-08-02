@@ -102,9 +102,11 @@ function extractSrcFromStacktrace(stack, level) {
     var targetLine = stackLines[level];
     var lineInfo = null;
     if(targetLine) {
-        var execResult = /^\s*(at|[@])\s*(.+)?$/.exec(targetLine);
+        var execResult = /^\s*(at|.*@)\s*(.+)?$/.exec(targetLine);
         if(Array.isArray(execResult) && execResult[2]) {
             lineInfo = execResult[2];
+        } else {
+            lineInfo = targetLine;    
         }
     }
     return lineInfo;
@@ -913,5 +915,6 @@ module.exports.safeCycles = safeCycles;
 //streams
 module.exports.ConsoleFormattedStream = ConsoleFormattedStream;
 module.exports.ConsoleRawStream = ConsoleRawStream;
+
 },{}]},{},[1])(1)
 });
