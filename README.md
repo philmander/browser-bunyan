@@ -7,7 +7,7 @@ The code also contains a dedicated browser console stream. Use it like this:
 ```javascript
 var bunyan = require('./lib/bunyan');
 var log = bunyan.createLogger({
-    name: 'play',
+    name: 'myLogger',
     streams: [
         {
             level: 'info',
@@ -19,6 +19,24 @@ var log = bunyan.createLogger({
 });
 
 log.info('hi on info');
+```
+
+Angular example:
+
+```javascript
+adminApp.config(function($provide) {
+    $provide.decorator('$log', function($delegate) {
+        $delegate = bunyan.createLogger({
+            name: 'myLogger',
+            streams: [{
+                level: 'info',
+                stream: new bunyan.ConsoleFormattedStream(),
+                type: 'raw'
+            }]
+        });
+        return $delegate;
+    });
+});
 ```
 
 Docs are the Bunyan docs at time of forking, with the documentation for the stripped features also removed:
