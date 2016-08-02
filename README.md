@@ -14,7 +14,8 @@ var log = bunyan.createLogger({
             stream: new bunyan.ConsoleFormattedStream()
             type: 'raw'
         }
-    ]
+    ],
+    src: true
 });
 
 log.info('hi on info');
