@@ -26,6 +26,8 @@ var LOG_VERSION = 0;
 
 //---- Internal support stuff
 
+var CALL_STACK_ERROR = 'call-stack-error';
+
 /**
  * A shallow copy of an object. Bunyan logging attempts to never cause
  * exceptions, so this function attempts to handle non-objects gracefully.
@@ -92,7 +94,7 @@ function extractSrcFromStacktrace(stack, level) {
     var stackLines = stack.split('\n');
 
     //chrome starts with error
-    if(stackLines[0] === 'Error') {
+    if(stackLines[0] && stackLines[0].indexOf(CALL_STACK_ERROR) >= 0) {
         stackLines.shift();
     }
 
@@ -100,7 +102,7 @@ function extractSrcFromStacktrace(stack, level) {
     var targetLine = stackLines[level];
     var lineInfo = null;
     if(targetLine) {
-        var execResult = /^\s*(at|[@])\s*(.+):\d*?$/.exec(targetLine);
+        var execResult = /^\s*(at|[@])\s*(.+)?$/.exec(targetLine);
         if(Array.isArray(execResult) && execResult[2]) {
             lineInfo = execResult[2];
         }
@@ -767,7 +769,7 @@ function mkLogEmitter(minLevel) {
             }
             // Get call source info
             if (log.src && !rec.src) {
-                var src = extractSrcFromStacktrace(new Error().stack, 2);
+                var src = extractSrcFromStacktrace(new Error(CALL_STACK_ERROR).stack, 2);
                 if(!src) {
                     if(!_haveWarned('src')) {
                         _warn('Unable to determine src line info', 'src');    
