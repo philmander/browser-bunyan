@@ -15,7 +15,7 @@
 
 'use strict';
 
-var VERSION = '0.2.2';
+var VERSION = '0.2.3';
 
 // Bunyan log format version. This becomes the 'v' field on all log records.
 // `0` is until I release a version '1.0.0' of node-bunyan. Thereafter,
@@ -87,31 +87,26 @@ var format = function(f) {
     return str;
 };
 
-/**
- * Gather some caller info 3 stack levels up.
- * See <http://code.google.com/p/v8/wiki/JavaScriptStackTraceApi>.
- */
-function getCaller3Info() {
-    var obj = {};
-    var saveLimit = Error.stackTraceLimit;
-    var savePrepare = Error.prepareStackTrace;
-    Error.stackTraceLimit = 3;
-    //Error.captureStackTrace(this, getCaller3Info);
+function extractSrcFromStacktrace(stack, level) {
 
-    Error.prepareStackTrace = function (_, stack) {
-        var caller = stack[2];
-        obj.file = caller.getFileName();
-        obj.line = caller.getLineNumber();
-        var func = caller.getFunctionName();
-        if (func) {
-            obj.func = func;
+    var stackLines = stack.split('\n');
+
+    //chrome starts with error
+    if(stackLines[0] === 'Error') {
+        stackLines.shift();
+    }
+
+    //the line of the stacktrace
+    var targetLine = stackLines[level];
+    var lineInfo = null;
+    if(targetLine) {
+        var execResult = /^\s*(at|[@])\s*(.+):\d*?$/.exec(targetLine);
+        if(Array.isArray(execResult) && execResult[2]) {
+            lineInfo = execResult[2];
         }
-    };
-    Error.stackTraceLimit = saveLimit;
-    Error.prepareStackTrace = savePrepare;
-    return obj;
+    }
+    return lineInfo;
 }
-
 
 function _indent(s, indent) {
     if (!indent) {
@@ -165,7 +160,10 @@ ConsoleRawStream.prototype.write = function (rec) {
 function ConsoleFormattedStream() {}
 ConsoleFormattedStream.prototype.write = function (rec) {
 
-    var levelCss, defaultCss = 'color: DimGray', msgCss = 'color: SteelBlue';
+    var levelCss,
+        defaultCss = 'color: DimGray',
+        msgCss = 'color: SteelBlue',
+        srcCss = 'color: DimGray; font-style: italic; font-size: 0.9em';
 
     if (rec.level < DEBUG) {
         levelCss = 'color: DeepPink';
@@ -191,12 +189,13 @@ ConsoleFormattedStream.prototype.write = function (rec) {
         return Array((len + 1) - (number + '').length).join('0') + number;
     }
 
-    console.log('[%s:%s:%s:%s] %c%s%c: %s: %c%s',
+    console.log('[%s:%s:%s:%s] %c%s%c: %s: %c%s %c%s',
         padZeros(rec.time.getHours(), 2), padZeros(rec.time.getMinutes(), 2),
         padZeros(rec.time.getSeconds(), 2), padZeros(rec.time.getMilliseconds(), 4),
         levelCss, levelName,
         defaultCss, loggerName,
-        msgCss, rec.msg);
+        msgCss, rec.msg,
+        srcCss, rec.src || '');
     if(rec.err && rec.err.stack) {
         console.log('%c%s,', levelCss, rec.err.stack);
     }
@@ -768,7 +767,13 @@ function mkLogEmitter(minLevel) {
             }
             // Get call source info
             if (log.src && !rec.src) {
-                rec.src = getCaller3Info();
+                var src = extractSrcFromStacktrace(new Error().stack, 2);
+                if(!src) {
+                    if(!_haveWarned('src')) {
+                        _warn('Unable to determine src line info', 'src');    
+                    }
+                }
+                rec.src = src || '';
             }
             rec.v = LOG_VERSION;
 
@@ -778,22 +783,7 @@ function mkLogEmitter(minLevel) {
         var fields = null;
         var msgArgs = arguments;
         var rec = null;
-        if (!this._emit) {
-            /*
-             * Show this invalid Bunyan usage warning *once*.
-             *
-             * See <https://github.com/trentm/node-bunyan/issues/100> for
-             * an example of how this can happen.
-             */
-            var dedupKey = 'unbound';
-            if (!_haveWarned[dedupKey]) {
-                var caller = getCaller3Info();
-                _warn(format('bunyan usage error: %s:%s: attempt to log with an unbound log method: `this` is: %s',
-                        caller.file, caller.line, this.toString()),
-                    dedupKey);
-            }
-            return;
-        } else if (arguments.length === 0) {   // `log.<level>()`
+        if (arguments.length === 0) {   // `log.<level>()`
             return (this._level <= minLevel);
         } else if (this._level > minLevel) {
             /* pass through */

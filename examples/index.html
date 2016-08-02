@@ -14,6 +14,7 @@
 
         var rawLogger = bunyan.createLogger({
             name: 'raw',
+            src: true,
             streams: [
                 {
                     level: 'trace',
@@ -42,7 +43,8 @@
                     stream: new bunyan.ConsoleFormattedStream(),
                     type: 'raw'
                 }
-            ]
+            ],
+            src: true
         });
 
         formattedLogger.trace('This is a %s log using a %s stream', 'trace', 'formatted');
@@ -51,8 +53,8 @@
         formattedLogger.warn('This is a %s log using a %s stream', 'warn', 'formatted');
         formattedLogger.error('This is a %s log using a %s stream', 'error', 'formatted');
         formattedLogger.fatal('This is a %s log using a %s stream', 'fatal', 'formatted');
-        formattedLogger.error(err, 'This is an %s log with an error object using a %s stream', 'error', 'raw');
-        formattedLogger.fatal(err, 'This is a %s log  with an error object using a %s stream', 'fatal', 'raw');
+        formattedLogger.error(err, 'This is an %s log with an error object using a %s stream', 'error', 'formatted');
+        formattedLogger.fatal(err, 'This is a %s log  with an error object using a %s stream', 'fatal', 'formatted');
 
     </script>
     <script>
