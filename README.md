@@ -1,11 +1,42 @@
-I created this project because i wanted a version of the, awesome logging framework, Bunyan specifically for the 
-browser. Although Bunyan does support being browserified, it is still a bit bloated in the browser with 
-features which aren't relevant in the browser.
+I created this project because I wanted a version of, the awesome logging framework, Bunyan specifically for the 
+browser. Although Bunyan does support being browserified, it is still a bit bloated with 
+features which aren't relevant in a browser environment.
 
-The code also contains a dedicated browser console stream. Use it like this:
+## Install
+
+Install with NPM or Bower respectively:
+
+`
+npm install browser-bunyan --save
+`
+
+`
+bower install browser-bunyan --save
+`
+
+or just copy the script from this repository's `/dist` directory.
+
+## Usage
+
+To use as a **global**, include as a standard script tag:
+
+`<script src=node_modules/browser-bunyan/dist/browser-bunyan.min.js></script>`
+
+now `bunyan` will be available on the `window` object
+
+Or, to use with **Browserify** or **Webpack**:
+
+`
+var bunyan = require('bunyan');
+`
+
+Naturally, Browser Bunyan can also be *imported* using ES6 module syntax or used with an AMD loader.
+
+### Formatted Log Stream
+
+The core library also includes a dedicated browser console stream with nice formatting. Use it like this:
 
 ```javascript
-var bunyan = require('./lib/bunyan');
 var log = bunyan.createLogger({
     name: 'myLogger',
     streams: [
@@ -21,7 +52,11 @@ var log = bunyan.createLogger({
 log.info('hi on info');
 ```
 
-Angular example:
+See the Node Bunyan docs below for more information on how to create you own custom stream(s).
+
+### Angular example:
+
+Integrate with Angular's log provider:
 
 ```javascript
 adminApp.config(function($provide) {
