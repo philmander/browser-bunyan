@@ -74,7 +74,7 @@ adminApp.config(function($provide) {
 });
 ```
 
-Docs are the Bunyan docs at time of forking, with the documentation for the stripped features also removed:
+The following docs are the original Bunyan docs at time of forking, with the documentation for the stripped features also removed:
 
 =====================================
 
