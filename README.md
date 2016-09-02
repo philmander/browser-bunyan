@@ -27,7 +27,7 @@ now `bunyan` will be available on the `window` object
 Or, to use with **Browserify** or **Webpack**:
 
 `
-var bunyan = require('bunyan');
+var bunyan = require('browser-bunyan');
 `
 
 Naturally, Browser Bunyan can also be *imported* using ES6 module syntax or used with an AMD loader.
