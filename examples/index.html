@@ -58,7 +58,7 @@
         formattedLogger.fatal('This is a %s log using a %s stream', 'fatal', 'formatted');
         formattedLogger.error(err, 'This is an %s log with an error object using a %s stream', 'error', 'formatted');
         formattedLogger.fatal(err, 'This is a %s log  with an error object using a %s stream', 'fatal', 'formatted');
-        formattedLogger.info(obj, 'This is an %s log with an object using a %s stream', 'info', 'formatted');
+        formattedLogger.info({ obj: obj }, 'This is an %s log with an object using a %s stream', 'info', 'formatted');
 
     </script>
     <script>
