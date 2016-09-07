@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/philmander/browser-bunyan.svg?branch=master)](https://travis-ci.org/philmander/browser-bunyan)
+
 I created this project because I wanted a version of, the awesome logging framework, Bunyan specifically for the 
 browser. Although Bunyan does support being browserified, it is still a bit bloated with 
 features which aren't relevant in a browser environment.
