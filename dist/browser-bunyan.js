@@ -193,10 +193,6 @@ ConsoleRawStream.prototype.write = function (rec) {
     }
 };
 
-function padZeros(number, len) {
-    return Array((len + 1) - (number + '').length).join('0') + number;
-}
-
 function ConsoleFormattedStream(opts) {
     opts = opts || {};
     this.logByLevel = !!opts.logByLevel;
@@ -238,6 +234,10 @@ ConsoleFormattedStream.prototype.write = function (rec) {
         levelCss = 'color: Crimson';
     } else {
         levelCss = 'color: Black';
+    }
+
+    function padZeros(number, len) {
+        return Array((len + 1) - (number + '').length).join('0') + number;
     }
 
     var logArgs = [];
