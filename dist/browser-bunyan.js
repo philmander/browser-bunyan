@@ -15,7 +15,7 @@
     
 'use strict';
 
-var VERSION = '0.2.3';
+var VERSION = '0.4.0';
 
 // Bunyan log format version. This becomes the 'v' field on all log records.
 // `0` is until I release a version '1.0.0' of node-bunyan. Thereafter,
@@ -159,6 +159,9 @@ ConsoleRawStream.prototype.write = function (rec) {
     if(rec.err && rec.err.stack) {
         console.error(rec.err.stack);
     }
+    if(rec.obj) {
+        console.log(rec.obj);
+    }
 };
 
 function ConsoleFormattedStream() {}
@@ -202,6 +205,9 @@ ConsoleFormattedStream.prototype.write = function (rec) {
         srcCss, rec.src || '');
     if(rec.err && rec.err.stack) {
         console.log('%c%s,', levelCss, rec.err.stack);
+    }
+    if(rec.obj) {
+        console.log(rec.obj);
     }
 };
 
@@ -740,12 +746,27 @@ function mkLogEmitter(minLevel) {
                 } else {
                     msgArgs = Array.prototype.slice.call(args, 1);
                 }
+            } else if (typeof (args[0]) === 'object' && args[0] !== null) {
+                // `log.<level>(object, ...)`
+                fields = {
+                    obj: (log.serializers && log.serializers.obj ? log.serializers.obj(args[0]) : Logger.stdSerializers.obj(args[0]))
+                };
+                excludeFields = {obj: true};
+                if (args.length === 1) {
+                    msgArgs = [ args[0].toString() ];
+                } else {
+                    msgArgs = Array.prototype.slice.call(args, 1);
+                }
             } else if (typeof (args[0]) !== 'object' && args[0] !== null ||
                 Array.isArray(args[0])) {
                 // `log.<level>(msg, ...)`
                 fields = null;
                 msgArgs = Array.prototype.slice.call(args);
-            } else {  // `log.<level>(fields, msg, ...)`
+            } else if (typeof (args[0]) === 'object' && args[0] !== null && args.length === 1) {
+                // `log.<level>(object)`
+                obj = args[0];
+            } else {
+                // `log.<level>(fields, msg, ...)`
                 fields = args[0];
                 msgArgs = Array.prototype.slice.call(args, 1);
             }
@@ -785,6 +806,7 @@ function mkLogEmitter(minLevel) {
         }
 
         var fields = null;
+        var obj = null;
         var msgArgs = arguments;
         var rec = null;
         if (arguments.length === 0) {   // `log.<level>()`
@@ -866,6 +888,14 @@ Logger.stdSerializers.err = function(err) {
         code: err.code,
         signal: err.signal
     };
+    return obj;
+};
+
+// Serialize any object
+Logger.stdSerializers.obj = function(obj) {
+    if (!obj) {
+        return obj;
+    }
     return obj;
 };
 

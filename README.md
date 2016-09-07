@@ -46,6 +46,7 @@ var log = bunyan.createLogger({
             type: 'raw'
         }
     ],
+    serializers: bunyan.stdSerializers,
     src: true
 });
 
