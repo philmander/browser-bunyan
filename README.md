@@ -34,7 +34,9 @@ var bunyan = require('browser-bunyan');
 
 Naturally, Browser Bunyan can also be *imported* using ES6 module syntax or used with an AMD loader.
 
-### Formatted Log Stream
+### Built-in Log Streams
+
+#### Formatted Log Stream
 
 The core library also includes a dedicated browser console stream with nice formatting. Use it like this:
 
@@ -54,9 +56,30 @@ var log = bunyan.createLogger({
 log.info('hi on info');
 ```
 
+By default this will use `console.log` for all logging. Pass the option `logByLevel` to the
+`ConsoleFormattedStream` to use the Console API's level specific logging methods (`console.info`, `console.warn`, etc). E.g.
+
+`new bunyan.ConsoleFormattedStream( { logByLevel: true } );`
+
+#### Console Raw Stream
+
+This logs the raw log record objects directly to the console.
+
+```javascript
+var log = bunyan.createLogger({
+    name: 'myLogger',
+    stream: {
+        level: 'info',
+        stream: new bunyan.ConsoleRawStream()
+    }
+});
+```
+
+#### Custom log streams
+
 See the Node Bunyan docs below for more information on how to create you own custom stream(s).
 
-### Angular example:
+### Angular integration:
 
 Integrate with Angular's log provider:
 
@@ -75,10 +98,30 @@ adminApp.config(function($provide) {
 });
 ```
 
-The following docs are the Bunyan docs at time of forking, with necessary 
-modifications and documentation for the stripped features also removed:
+### Browser specific features
+
+#### Logging objects to the console
+
+As per, Bunyan's [log API](#log-method-api), if you log an object under the 
+field `obj` as the first argument, Browser Bunyan's built-in log streams will log this object
+directly to the console:
+
+```
+var myObject = { x: 1, y: 2 };
+logger.info({ obj: myObject }, 'This is my object:'); 
+```
+
+#### Stream types
+
+Node Bunyan supports various [types of streams](#streams-introduction). In Browser Bunyan, streams
+are always of type 'raw'.
 
 =====================================
+
+## Docs from Bunyan
+
+The following docs are the [node-bunyan](https://github.com/trentm/node-bunyan) docs at time of forking, with necessary 
+modifications and documentation for the stripped features also removed:
 
 Bunyan is **a simple and fast JSON logging library** for node.js services:
 
