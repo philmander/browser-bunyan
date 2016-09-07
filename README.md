@@ -43,7 +43,6 @@ var log = bunyan.createLogger({
         {
             level: 'info',
             stream: new bunyan.ConsoleFormattedStream()
-            type: 'raw'
         }
     ],
     serializers: bunyan.stdSerializers,
@@ -67,7 +66,6 @@ adminApp.config(function($provide) {
             streams: [{
                 level: 'info',
                 stream: new bunyan.ConsoleFormattedStream(),
-                type: 'raw'
             }]
         });
         return $delegate;
@@ -75,13 +73,14 @@ adminApp.config(function($provide) {
 });
 ```
 
-The following docs are the original Bunyan docs at time of forking, with the documentation for the stripped features also removed:
+The following docs are the Bunyan docs at time of forking, with necessary 
+modifications and documentation for the stripped features also removed:
 
 =====================================
 
 Bunyan is **a simple and fast JSON logging library** for node.js services:
 
-    var bunyan = require('bunyan');
+    var bunyan = require('browser-bunyan');
     var log = bunyan.createLogger({name: "myapp"});
     log.info("hi");
 
@@ -142,7 +141,7 @@ Like most logging libraries you create a Logger instance and call methods
 named after the logging levels:
 
     $ cat hi.js
-    var bunyan = require('bunyan');
+    var bunyan = require('browser-bunyan');
     var log = bunyan.createLogger({name: 'myapp'});
     log.info('hi');
     log.warn({lang: 'fr'}, 'au revoir');
@@ -239,7 +238,7 @@ In the following example, logging on a "Wuzzle" instance's `this.log` will
 be exactly as on the parent logger with the addition of the `widget_type`
 field:
 
-    var bunyan = require('bunyan');
+    var bunyan = require('browser-bunyan');
     var log = bunyan.createLogger({name: 'myapp'});
 
     function Wuzzle(options) {
@@ -469,7 +468,7 @@ interface, but there are some additional attributes used to create and
 manage the stream. A Bunyan Logger instance has one or more streams.
 In general streams are specified with the "streams" option:
 
-    var bunyan = require('bunyan');
+    var bunyan = require('browser-bunyan');
     var log = bunyan.createLogger({
         name: "foo",
         streams: [
@@ -497,27 +496,14 @@ on log records).
 If neither "streams" nor "stream" are specified, the default is a stream of
 type "stream" emitting to `process.stdout` at the "info" level.
 
-
-## stream errors
-
-Bunyan re-emits error events from the created `WriteStream`. So you can
-do this:
-
-    var log = bunyan.createLogger({name: 'mylog', streams: [{path: LOG_PATH}]});
-    log.on('error', function (err, stream) {
-        // Handle stream write or create error here.
-    });
-
-Note: This is **not** that same as a log record at the "error" level as
-produced by `log.error(...)`.
-
-
 ## stream type: `raw`
 
 - `raw`: Similar to a "stream" writeable stream, except that the write method
   is given raw log record *Object*s instead of a JSON-stringified string.
   This can be useful for hooking on further processing to all Bunyan logging:
   pushing to an external service, a RingBuffer (see below), etc.
+  
+Note that in browser-bunyan streams are always `raw`
 
 
 # Browserify
@@ -545,7 +531,7 @@ script.
 2. An example script using Bunyan, "play.js":
 
     ```javascript
-    var bunyan = require('bunyan');
+    var bunyan = require('browser-bunyan');
     var log = bunyan.createLogger({name: 'play', level: 'debug'});
     log.trace('this one does not emit');
     log.debug('hi on debug');   // console.log

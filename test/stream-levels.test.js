@@ -21,17 +21,6 @@ var test = tap4nodeunit.test;
 
 // ---- Tests
 
-var log1 = bunyan.createLogger({
-    name: 'log1',
-    streams: [
-        {
-            path: __dirname + '/level.test.log1.log',
-            level: 'info'
-        }
-    ]
-});
-
-
 test('default stream log level', function (t) {
     var log = bunyan.createLogger({
         name: 'foo'

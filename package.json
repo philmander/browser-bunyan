@@ -15,6 +15,9 @@
     "json",
     "bunyan"
   ],
+  "scripts" : {
+    "test" : "node_modules/nodeunit/bin/nodeunit test/*.test.js"
+  },
   "devDependencies": {
     "browserify": "^9.0.4",
     "del": "^1.1.1",
@@ -23,6 +26,8 @@
     "gulp-jshint": "^1.10.0",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.1.0",
+    "nodeunit": "^0.10.2",
+    "verror": "^1.8.1",
     "vinyl-source-stream": "^1.1.0"
   },
   "licenses": [

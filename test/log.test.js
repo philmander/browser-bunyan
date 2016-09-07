@@ -221,7 +221,7 @@ test('log.info(<array>)', function (t) {
     names.forEach(function (lvl) {
         log3[lvl].call(log3, arr);
         var rec = catcher.records[catcher.records.length - 1];
-        t.equal(rec.msg, format(arr),
+        t.equal(rec.msg, '[ \'a\', 1, {"two":"deux"} ]',
             format('log.%s msg: got %j', lvl, rec.msg));
     });
     t.end();
@@ -232,7 +232,7 @@ test('log.info(<fields>, <array>)', function (t) {
     names.forEach(function (lvl) {
         log3[lvl].call(log3, fields, arr);
         var rec = catcher.records[catcher.records.length - 1];
-        t.equal(rec.msg, format(arr),
+        t.equal(rec.msg, '[ \'a\', 1, {"two":"deux"} ]',
             format('log.%s msg: got %j', lvl, rec.msg));
         t.equal(rec.one, 'un');
     });
