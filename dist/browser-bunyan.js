@@ -746,25 +746,11 @@ function mkLogEmitter(minLevel) {
                 } else {
                     msgArgs = Array.prototype.slice.call(args, 1);
                 }
-            } else if (typeof (args[0]) === 'object' && args[0] !== null) {
-                // `log.<level>(object, ...)`
-                fields = {
-                    obj: (log.serializers && log.serializers.obj ? log.serializers.obj(args[0]) : Logger.stdSerializers.obj(args[0]))
-                };
-                excludeFields = {obj: true};
-                if (args.length === 1) {
-                    msgArgs = [ args[0].toString() ];
-                } else {
-                    msgArgs = Array.prototype.slice.call(args, 1);
-                }
             } else if (typeof (args[0]) !== 'object' && args[0] !== null ||
                 Array.isArray(args[0])) {
                 // `log.<level>(msg, ...)`
                 fields = null;
                 msgArgs = Array.prototype.slice.call(args);
-            } else if (typeof (args[0]) === 'object' && args[0] !== null && args.length === 1) {
-                // `log.<level>(object)`
-                obj = args[0];
             } else {
                 // `log.<level>(fields, msg, ...)`
                 fields = args[0];
@@ -784,7 +770,7 @@ function mkLogEmitter(minLevel) {
                 });
             }
             rec.levelName = nameFromLevel[minLevel];
-            rec.msg = format.apply(log, msgArgs);
+            rec.msg = msgArgs.length ? format.apply(log, msgArgs) : '';
             if (!rec.time) {
                 rec.time = (new Date());
             }
@@ -806,7 +792,6 @@ function mkLogEmitter(minLevel) {
         }
 
         var fields = null;
-        var obj = null;
         var msgArgs = arguments;
         var rec = null;
         if (arguments.length === 0) {   // `log.<level>()`
@@ -890,15 +875,6 @@ Logger.stdSerializers.err = function(err) {
     };
     return obj;
 };
-
-// Serialize any object
-Logger.stdSerializers.obj = function(obj) {
-    if (!obj) {
-        return obj;
-    }
-    return obj;
-};
-
 
 // A JSON stringifier that handles cycles safely.
 // Usage: JSON.stringify(obj, safeCycles())
