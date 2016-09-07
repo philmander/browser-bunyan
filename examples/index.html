@@ -42,7 +42,9 @@
             streams: [
                 {
                     level: 'trace',
-                    stream: new bunyan.ConsoleFormattedStream(),
+                    stream: new bunyan.ConsoleFormattedStream({
+                        logByLevel: false
+                    }),
 
                 }
             ],
