@@ -19,12 +19,13 @@
                 {
                     level: 'trace',
                     stream: new bunyan.ConsoleRawStream(),
-                    type: 'raw'
+
                 }
             ]
         });
 
         var err = new Error('Example Error');
+        var obj = { x: 1, y: { z: function() { return 'foo'}} };
 
         rawLogger.trace('This is a %s log using a %s stream', 'trace', 'raw');
         rawLogger.debug('This is a %s log using a %s stream', 'debug', 'raw');
@@ -33,17 +34,21 @@
         rawLogger.error('This is an %s log using a %s stream', 'error', 'raw');
         rawLogger.fatal('This is a %s log using a %s stream', 'fatal', 'raw');
         rawLogger.error(err, 'This is an %s log with an error object using a %s stream', 'error', 'raw');
-        rawLogger.fatal(err, 'This is a %s log with an error object using a %s stream', 'fatal', 'raw');
+        rawLogger.fatal(err, 'This is a %s log with an error object using a %s stream', 'fatalgul', 'raw');
+        rawLogger.info(obj, 'This is an %s log with an object using a %s stream', 'info', 'raw');
 
         var formattedLogger = bunyan.createLogger({
             name: 'formatted',
             streams: [
                 {
                     level: 'trace',
-                    stream: new bunyan.ConsoleFormattedStream(),
-                    type: 'raw'
+                    stream: new bunyan.ConsoleFormattedStream({
+                        logByLevel: false
+                    }),
+
                 }
             ],
+            serializers: bunyan.stdSerializers,
             src: true
         });
 
@@ -55,6 +60,7 @@
         formattedLogger.fatal('This is a %s log using a %s stream', 'fatal', 'formatted');
         formattedLogger.error(err, 'This is an %s log with an error object using a %s stream', 'error', 'formatted');
         formattedLogger.fatal(err, 'This is a %s log  with an error object using a %s stream', 'fatal', 'formatted');
+        formattedLogger.info({ obj: obj }, 'This is an %s log with an object using a %s stream', 'info', 'formatted');
 
     </script>
     <script>

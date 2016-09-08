@@ -15,7 +15,7 @@
     
 'use strict';
 
-var VERSION = '0.2.3';
+var VERSION = '0.4.0';
 
 // Bunyan log format version. This becomes the 'v' field on all log records.
 // `0` is until I release a version '1.0.0' of node-bunyan. Thereafter,
@@ -48,15 +48,44 @@ function objCopy(obj) {
     }
 }
 
-var format = function(f) {
+//---- These are simplified versions of util.format without importing the whole module, which would be bulky when browserified
 
-    if(f === null) {
+var inspect = function(obj) {
+    if(typeof obj === 'undefined') {
+        return 'undefined';
+    }
+    if(obj === null) {
         return 'null';
     }
-
-    if(typeof f !== 'string') {
-        return f.toString();
+    if(Array.isArray(obj)) {
+        var items = obj.map(function(obj) {
+            return inspect(obj);
+        });
+        return '[ ' + items.join(', ') + ' ]';
     }
+    if(typeof obj === 'object') {
+        return JSON.stringify(obj);
+    }
+    if(typeof obj === 'function') {
+        return '[Function: ' + obj.name + ']';
+    }
+    if(typeof obj === 'boolean' || typeof obj === 'number') {
+        return obj;
+    }
+    return '\'' + obj.toString() + '\'';
+};
+
+var format = function(f) {
+
+    if (typeof f !== 'string') {
+        var objects = new Array(arguments.length);
+        for (var index = 0; index < arguments.length; index++) {
+            objects[index] = inspect(arguments[index]);
+        }
+        return objects.join(' ');
+    }
+
+
     var formatRegExp = /%[sdj%]/g;
 
     var i = 1;
@@ -159,15 +188,39 @@ ConsoleRawStream.prototype.write = function (rec) {
     if(rec.err && rec.err.stack) {
         console.error(rec.err.stack);
     }
+    if(rec.obj) {
+        console.log(rec.obj);
+    }
 };
 
-function ConsoleFormattedStream() {}
+function ConsoleFormattedStream(opts) {
+    opts = opts || {};
+    this.logByLevel = !!opts.logByLevel;
+}
 ConsoleFormattedStream.prototype.write = function (rec) {
 
     var levelCss,
         defaultCss = 'color: DimGray',
         msgCss = 'color: SteelBlue',
-        srcCss = 'color: DimGray; font-style: italic; font-size: 0.9em';
+        srcCss = 'color: DimGray; font-style: italic; font-size: 0.9em',
+        consoleMethod;
+
+    var loggerName = rec.childName ? rec.name + '/' + rec.childName : rec.name;
+
+    //get level name and pad start with spacs
+    var levelName = nameFromLevel[rec.level];
+    var formattedLevelName = (Array(6 - levelName.length).join(' ') + levelName).toUpperCase();
+
+    if(this.logByLevel) {
+        if(rec.level === TRACE) {
+            levelName = 'debug';
+        } else if(rec.level === FATAL) {
+            levelName = 'error';
+        }
+        consoleMethod = typeof console[levelName] === 'function' ? console[levelName] : console.log;
+    } else {
+        consoleMethod = console.log;
+    }
 
     if (rec.level < DEBUG) {
         levelCss = 'color: DeepPink';
@@ -183,25 +236,33 @@ ConsoleFormattedStream.prototype.write = function (rec) {
         levelCss = 'color: Black';
     }
 
-    var loggerName = rec.childName ? rec.name + '/' + rec.childName : rec.name;
-
-    //get level name and pad start with spacs
-    var levelName = nameFromLevel[rec.level].toUpperCase();
-    levelName = Array(6 - levelName.length).join(' ') + levelName;
-
     function padZeros(number, len) {
         return Array((len + 1) - (number + '').length).join('0') + number;
     }
 
-    console.log('[%s:%s:%s:%s] %c%s%c: %s: %c%s %c%s',
-        padZeros(rec.time.getHours(), 2), padZeros(rec.time.getMinutes(), 2),
-        padZeros(rec.time.getSeconds(), 2), padZeros(rec.time.getMilliseconds(), 4),
-        levelCss, levelName,
-        defaultCss, loggerName,
-        msgCss, rec.msg,
-        srcCss, rec.src || '');
+    var logArgs = [];
+    logArgs.push('[%s:%s:%s:%s] %c%s%c: %s: %c%s %c%s');
+    logArgs.push(padZeros(rec.time.getHours(), 2));
+    logArgs.push(padZeros(rec.time.getMinutes(), 2));
+    logArgs.push(padZeros(rec.time.getSeconds(), 2));
+    logArgs.push(padZeros(rec.time.getMilliseconds(), 4));
+    logArgs.push(levelCss);
+    logArgs.push(formattedLevelName);
+    logArgs.push(defaultCss);
+    logArgs.push(loggerName);
+    logArgs.push(msgCss);
+    logArgs.push(rec.msg);
+    if(rec.src) {
+        logArgs.push(srcCss);
+        logArgs.push(rec.src);
+    }
+
+    consoleMethod.apply(console, logArgs);
     if(rec.err && rec.err.stack) {
-        console.log('%c%s,', levelCss, rec.err.stack);
+        consoleMethod.call(console, '%c%s,', levelCss, rec.err.stack);
+    }
+    if(rec.obj) {
+        consoleMethod.call(console, rec.obj);
     }
 };
 
@@ -445,11 +506,8 @@ Logger.prototype.addStream = function addStream(s, defaultLevel) {
 
     s = objCopy(s);
 
-    // Implicit 'type' from other args.
-    if (!s.type && s.stream) {
-        s.type = 'raw';
-    }
-    s.raw = (s.type === 'raw');  // PERF: Allow for faster check in `_emit`.
+    //in browser bunyan, streams are always raw
+    s.type = 'raw';
 
     if (s.level) {
         s.level = resolveLevel(s.level);
@@ -460,19 +518,8 @@ Logger.prototype.addStream = function addStream(s, defaultLevel) {
         self._level = s.level;
     }
 
-    switch (s.type) {
-        case 'stream':
-            if (!s.closeOnExit) {
-                s.closeOnExit = false;
-            }
-            break;
-        case 'raw':
-            if (!s.closeOnExit) {
-                s.closeOnExit = false;
-            }
-            break;
-        default:
-            throw new TypeError('unknown stream type "' + s.type + '"');
+    if (!s.closeOnExit) {
+        s.closeOnExit = false;
     }
 
     self.streams.push(s);
@@ -710,7 +757,7 @@ Logger.prototype._emit = function (rec, noemit) {
     for (i = 0; i < this.streams.length; i++) {
         var s = this.streams[i];
         if (s.level <= level) {
-            s.stream.write(s.raw ? rec : str);
+            s.stream.write(rec);
         }
     }
 
@@ -740,14 +787,19 @@ function mkLogEmitter(minLevel) {
                 } else {
                     msgArgs = Array.prototype.slice.call(args, 1);
                 }
-            } else if (typeof (args[0]) !== 'object' && args[0] !== null ||
-                Array.isArray(args[0])) {
+            } else if (typeof (args[0]) !== 'object' && args[0] !== null || Array.isArray(args[0])) {
                 // `log.<level>(msg, ...)`
                 fields = null;
                 msgArgs = Array.prototype.slice.call(args);
-            } else {  // `log.<level>(fields, msg, ...)`
+            } else {
+                // `log.<level>(fields, msg, ...)`
                 fields = args[0];
-                msgArgs = Array.prototype.slice.call(args, 1);
+                if (args.length === 1 && fields.err && fields.err instanceof Error)
+                {
+                    msgArgs = [fields.err.message];
+                } else {
+                    msgArgs = Array.prototype.slice.call(args, 1);
+                }
             }
 
             // Build up the record object.
@@ -763,7 +815,7 @@ function mkLogEmitter(minLevel) {
                 });
             }
             rec.levelName = nameFromLevel[minLevel];
-            rec.msg = format.apply(log, msgArgs);
+            rec.msg = msgArgs.length ? format.apply(log, msgArgs) : '';
             if (!rec.time) {
                 rec.time = (new Date());
             }
@@ -868,7 +920,6 @@ Logger.stdSerializers.err = function(err) {
     };
     return obj;
 };
-
 
 // A JSON stringifier that handles cycles safely.
 // Usage: JSON.stringify(obj, safeCycles())
