@@ -49,6 +49,9 @@ const log = bunyan.createLogger(...);
 
 ### Built-in Log Streams
 
+Bunyan uses "log streams" to customize how each log record is processed. You can write your own to
+whatever you want or use the built-in log streams which output log records to the console:
+
 #### Formatted Log Stream
 
 The core library also includes a dedicated browser console stream with nice formatting. Use it like this:
