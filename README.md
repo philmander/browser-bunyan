@@ -96,6 +96,10 @@ const log = createLogger({
 });
 ```
 
+#### Custom log streams
+
+See the Node Bunyan docs below for more information on how to create you own custom stream(s).
+
 ### Conditional logging
 
 If a stream's log level is set to `info` then `debug` and `trace` messages will not be
@@ -127,10 +131,6 @@ if(log.level() <= DEBUG) {
     log.debug(JSON.stringify(req));
 }
 ```
-
-#### Custom log streams
-
-See the Node Bunyan docs below for more information on how to create you own custom stream(s).
 
 ### Angular 1.x integration:
 
