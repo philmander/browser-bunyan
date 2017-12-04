@@ -18,8 +18,6 @@ import { ConsoleRawStream} from './console-raw-stream';
  *          - `path` or `stream`: The specify the file path or writeable
  *            stream to which log records are written. E.g.
  *            `stream: process.stdout`.
- *          - `closeOnExit` (boolean): Optional. Default is true for a
- *            'file' stream when `path` is given, false otherwise.
  *        See README.md for full details.
  *      - `level`: set the level for a single output stream (cannot be used
  *        with `streams`)
@@ -104,7 +102,6 @@ class Logger {
             this.streams = [];
             for (i = 0; i < parent.streams.length; i++) {
                 const s = objCopy(parent.streams[i]);
-                s.closeOnExit = false; // Don't own parent stream.
                 this.streams.push(s);
             }
             this.serializers = objCopy(parent.serializers);
@@ -127,7 +124,6 @@ class Logger {
             this.addStream({
                 type: 'stream',
                 stream: options.stream,
-                closeOnExit: false,
                 level: options.level,
             });
         } else if (options.streams) {
@@ -147,7 +143,6 @@ class Logger {
             this.addStream({
                 type: 'raw',
                 stream: new ConsoleRawStream(),
-                closeOnExit: false,
                 level: options.level,
             });
         }
@@ -188,33 +183,19 @@ class Logger {
      *      stream to which log records are written. E.g.
      *      `stream: process.stdout`.
      *    - `level`: Optional. Falls back to `defaultLevel`.
-     *    - `closeOnExit` (boolean): Optional. Default is true for a
-     *      'file' stream when `path` is given, false otherwise.
      *    See README.md for full details.
      * @param defaultLevel {Number|String} Optional. A level to use if
      *      `stream.level` is not set. If neither is given, this defaults to INFO.
      */
-    addStream(s, defaultLevel) {
-        if (defaultLevel === null || defaultLevel === undefined) {
-            defaultLevel = INFO;
-        }
-
+    addStream(s, defaultLevel = INFO) {
         s = objCopy(s);
 
         //in browser bunyan, streams are always raw
         s.type = 'raw';
+        s.level = resolveLevel(s.level || defaultLevel);
 
-        if (s.level) {
-            s.level = resolveLevel(s.level);
-        } else {
-            s.level = resolveLevel(defaultLevel);
-        }
         if (s.level < this._level) {
             this._level = s.level;
-        }
-
-        if (!s.closeOnExit) {
-            s.closeOnExit = false;
         }
 
         this.streams.push(s);
