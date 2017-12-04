@@ -75,7 +75,7 @@ log.info('hi on info');
 By default this will use `console.log` for all logging. Pass the option `logByLevel` to the
 `ConsoleFormattedStream` to use the Console API's level specific logging methods (`console.info`, `console.warn`, etc). E.g.
 
-`new bunyan.ConsoleFormattedStream( { logByLevel: true } );`
+`new ConsoleFormattedStream( { logByLevel: true } );`
 
 #### Console Raw Stream
 
@@ -103,7 +103,7 @@ logger.debug('Sent fetch request');
 ```
 
 However, if you need to do some computation which is passed to your logger statement
-in `debug`, then this is inefficient if the log level is higher than 'debug'.
+in `debug`, then this is inefficient when the log level is higher than 'debug'.
 Therefore you should conditionally execute the logger statement:
 
 ```javascript
