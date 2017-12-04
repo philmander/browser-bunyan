@@ -5,64 +5,53 @@
  * a Logger instance) get the appropriate level.
  */
 
-var util = require('util'),
-    format = util.format,
-    inspect = util.inspect;
-var p = console.log;
-
-var bunyan = require('../lib/bunyan');
-
-// node-tap API
-if (require.cache[__dirname + '/tap4nodeunit.js'])
-        delete require.cache[__dirname + '/tap4nodeunit.js'];
-var tap4nodeunit = require('./tap4nodeunit.js');
-var test = tap4nodeunit.test;
-
+import { createLogger, FATAL, ERROR, INFO, DEBUG, TRACE } from '../src/index';
+import { test, beforEach as before, afterEach as after } from "babel-tap";
 
 // ---- Tests
 
 test('default stream log level', function (t) {
-    var log = bunyan.createLogger({
+    var log = createLogger({
         name: 'foo'
     });
-    t.equal(log.level(), bunyan.INFO);
-    t.equal(log.streams[0].level, bunyan.INFO);
+    t.equal(log.level(), INFO);
+    t.equal(log.streams[0].level, INFO);
     t.end();
 });
 
 test('default stream, level=DEBUG specified', function (t) {
-    var log = bunyan.createLogger({
+    var log = createLogger({
         name: 'foo',
-        level: bunyan.DEBUG
+        level: DEBUG
     });
-    t.equal(log.level(), bunyan.DEBUG);
-    t.equal(log.streams[0].level, bunyan.DEBUG);
+    t.equal(log.level(), DEBUG);
+    t.equal(log.streams[0].level, DEBUG);
     t.end();
 });
 
 test('default stream, level="trace" specified', function (t) {
-    var log = bunyan.createLogger({
+    var log = createLogger({
         name: 'foo',
         level: 'trace'
     });
-    t.equal(log.level(), bunyan.TRACE);
-    t.equal(log.streams[0].level, bunyan.TRACE);
+    t.equal(log.level(), TRACE);
+    t.equal(log.streams[0].level, TRACE);
     t.end();
 });
 
 test('stream & level="trace" specified', function (t) {
-    var log = bunyan.createLogger({
+    var log = createLogger({
         name: 'foo',
         stream: process.stderr,
         level: 'trace'
     });
-    t.equal(log.level(), bunyan.TRACE);
-    t.equal(log.streams[0].level, bunyan.TRACE);
+    t.equal(log.level(), TRACE);
+    t.equal(log.streams[0].level, TRACE);
     t.end();
 });
 
 test('one stream, default level', function (t) {
-    var log = bunyan.createLogger({
+    var log = createLogger({
         name: 'foo',
         streams: [
             {
@@ -70,13 +59,13 @@ test('one stream, default level', function (t) {
             }
         ]
     });
-    t.equal(log.level(), bunyan.INFO);
-    t.equal(log.streams[0].level, bunyan.INFO);
+    t.equal(log.level(), INFO);
+    t.equal(log.streams[0].level, INFO);
     t.end();
 });
 
 test('one stream, top-"level" specified', function (t) {
-    var log = bunyan.createLogger({
+    var log = createLogger({
         name: 'foo',
         level: 'error',
         streams: [
@@ -85,13 +74,13 @@ test('one stream, top-"level" specified', function (t) {
             }
         ]
     });
-    t.equal(log.level(), bunyan.ERROR);
-    t.equal(log.streams[0].level, bunyan.ERROR);
+    t.equal(log.level(), ERROR);
+    t.equal(log.streams[0].level, ERROR);
     t.end();
 });
 
 test('one stream, stream-"level" specified', function (t) {
-    var log = bunyan.createLogger({
+    var log = createLogger({
         name: 'foo',
         streams: [
             {
@@ -100,13 +89,13 @@ test('one stream, stream-"level" specified', function (t) {
             }
         ]
     });
-    t.equal(log.level(), bunyan.ERROR);
-    t.equal(log.streams[0].level, bunyan.ERROR);
+    t.equal(log.level(), ERROR);
+    t.equal(log.streams[0].level, ERROR);
     t.end();
 });
 
 test('one stream, both-"level" specified', function (t) {
-    var log = bunyan.createLogger({
+    var log = createLogger({
         name: 'foo',
         level: 'debug',
         streams: [
@@ -116,13 +105,13 @@ test('one stream, both-"level" specified', function (t) {
             }
         ]
     });
-    t.equal(log.level(), bunyan.ERROR);
-    t.equal(log.streams[0].level, bunyan.ERROR);
+    t.equal(log.level(), ERROR);
+    t.equal(log.streams[0].level, ERROR);
     t.end();
 });
 
 test('two streams, both-"level" specified', function (t) {
-    var log = bunyan.createLogger({
+    var log = createLogger({
         name: 'foo',
         level: 'debug',
         streams: [
@@ -136,14 +125,14 @@ test('two streams, both-"level" specified', function (t) {
             }
         ]
     });
-    t.equal(log.level(), bunyan.TRACE, 'log.level()');
-    t.equal(log.streams[0].level, bunyan.TRACE);
-    t.equal(log.streams[1].level, bunyan.FATAL);
+    t.equal(log.level(), TRACE, 'log.level()');
+    t.equal(log.streams[0].level, TRACE);
+    t.equal(log.streams[1].level, FATAL);
     t.end();
 });
 
 test('two streams, one with "level" specified', function (t) {
-    var log = bunyan.createLogger({
+    var log = createLogger({
         name: 'foo',
         streams: [
             {
@@ -155,8 +144,8 @@ test('two streams, one with "level" specified', function (t) {
             }
         ]
     });
-    t.equal(log.level(), bunyan.INFO);
-    t.equal(log.streams[0].level, bunyan.INFO);
-    t.equal(log.streams[1].level, bunyan.FATAL);
+    t.equal(log.level(), INFO);
+    t.equal(log.streams[0].level, INFO);
+    t.equal(log.streams[1].level, FATAL);
     t.end();
 });

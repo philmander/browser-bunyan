@@ -5,3 +5,6 @@
 /test
 /*.tgz
 /tools
+
+.eslintrc.js
+src

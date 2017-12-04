@@ -3,4 +3,7 @@
 *.log
 !/test/corpus/*.log
 /*.tgz
-.idea
+.
+
+dist
+lib

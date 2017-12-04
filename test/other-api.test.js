@@ -4,39 +4,34 @@
  * Test other parts of the exported API.
  */
 
-var bunyan = require('../lib/bunyan');
+import { resolveLevel, FATAL, ERROR, WARN, INFO, DEBUG, TRACE } from '../src/index';
 
-// node-tap API
-if (require.cache[__dirname + '/tap4nodeunit.js'])
-        delete require.cache[__dirname + '/tap4nodeunit.js'];
-var tap4nodeunit = require('./tap4nodeunit.js');
-var after = tap4nodeunit.after;
-var before = tap4nodeunit.before;
-var test = tap4nodeunit.test;
+import { test, beforEach as before, afterEach as after } from "babel-tap";
 
 
-test('bunyan.<LEVEL>s', function (t) {
-    t.ok(bunyan.TRACE, 'TRACE');
-    t.ok(bunyan.DEBUG, 'DEBUG');
-    t.ok(bunyan.INFO, 'INFO');
-    t.ok(bunyan.WARN, 'WARN');
-    t.ok(bunyan.ERROR, 'ERROR');
-    t.ok(bunyan.FATAL, 'FATAL');
+
+test('<LEVEL>s', function (t) {
+    t.ok(TRACE, 'TRACE');
+    t.ok(DEBUG, 'DEBUG');
+    t.ok(INFO, 'INFO');
+    t.ok(WARN, 'WARN');
+    t.ok(ERROR, 'ERROR');
+    t.ok(FATAL, 'FATAL');
     t.end();
 });
 
-test('bunyan.resolveLevel()', function (t) {
-    t.equal(bunyan.resolveLevel('trace'), bunyan.TRACE, 'TRACE');
-    t.equal(bunyan.resolveLevel('TRACE'), bunyan.TRACE, 'TRACE');
-    t.equal(bunyan.resolveLevel('debug'), bunyan.DEBUG, 'DEBUG');
-    t.equal(bunyan.resolveLevel('DEBUG'), bunyan.DEBUG, 'DEBUG');
-    t.equal(bunyan.resolveLevel('info'), bunyan.INFO, 'INFO');
-    t.equal(bunyan.resolveLevel('INFO'), bunyan.INFO, 'INFO');
-    t.equal(bunyan.resolveLevel('warn'), bunyan.WARN, 'WARN');
-    t.equal(bunyan.resolveLevel('WARN'), bunyan.WARN, 'WARN');
-    t.equal(bunyan.resolveLevel('error'), bunyan.ERROR, 'ERROR');
-    t.equal(bunyan.resolveLevel('ERROR'), bunyan.ERROR, 'ERROR');
-    t.equal(bunyan.resolveLevel('fatal'), bunyan.FATAL, 'FATAL');
-    t.equal(bunyan.resolveLevel('FATAL'), bunyan.FATAL, 'FATAL');
+test('resolveLevel()', function (t) {
+    t.equal(resolveLevel('trace'), TRACE, 'TRACE');
+    t.equal(resolveLevel('TRACE'), TRACE, 'TRACE');
+    t.equal(resolveLevel('debug'), DEBUG, 'DEBUG');
+    t.equal(resolveLevel('DEBUG'), DEBUG, 'DEBUG');
+    t.equal(resolveLevel('info'), INFO, 'INFO');
+    t.equal(resolveLevel('INFO'), INFO, 'INFO');
+    t.equal(resolveLevel('warn'), WARN, 'WARN');
+    t.equal(resolveLevel('WARN'), WARN, 'WARN');
+    t.equal(resolveLevel('error'), ERROR, 'ERROR');
+    t.equal(resolveLevel('ERROR'), ERROR, 'ERROR');
+    t.equal(resolveLevel('fatal'), FATAL, 'FATAL');
+    t.equal(resolveLevel('FATAL'), FATAL, 'FATAL');
     t.end();
 });

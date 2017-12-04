@@ -4,17 +4,8 @@
  * Test some `<Logger>.child(...)` behaviour.
  */
 
-var bunyan = require('../lib/bunyan');
-
-// node-tap API
-if (require.cache[__dirname + '/tap4nodeunit.js'])
-        delete require.cache[__dirname + '/tap4nodeunit.js'];
-var tap4nodeunit = require('./tap4nodeunit.js');
-var after = tap4nodeunit.after;
-var before = tap4nodeunit.before;
-var test = tap4nodeunit.test;
-
-
+import { createLogger } from '../src/index';
+import { test, beforEach as before, afterEach as after } from "babel-tap";
 
 function CapturingStream(recs) {
     this.recs = recs || [];
@@ -27,7 +18,7 @@ CapturingStream.prototype.write = function (rec) {
 
 test('child can add stream', function (t) {
     var dadStream = new CapturingStream();
-    var dad = bunyan.createLogger({
+    var dad = createLogger({
         name: 'surname',
         streams: [ {
             type: 'raw',
@@ -64,7 +55,7 @@ test('child can add stream', function (t) {
 
 test('child can set level of inherited streams', function (t) {
     var dadStream = new CapturingStream();
-    var dad = bunyan.createLogger({
+    var dad = createLogger({
         name: 'surname',
         streams: [ {
             type: 'raw',
@@ -97,7 +88,7 @@ test('child can set level of inherited streams', function (t) {
 
 test('child can set level of inherited streams and add streams', function (t) {
     var dadStream = new CapturingStream();
-    var dad = bunyan.createLogger({
+    var dad = createLogger({
         name: 'surname',
         streams: [ {
             type: 'raw',

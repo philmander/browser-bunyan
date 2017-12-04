@@ -4,25 +4,15 @@
  * Test the `log.level(...)`.
  */
 
-var util = require('util'),
-    format = util.format,
-    inspect = util.inspect;
+import { createLogger, FATAL, ERROR, INFO, DEBUG, TRACE } from '../src/index';
+
 var p = console.log;
 
-var bunyan = require('../lib/bunyan');
-
-// node-tap API
-if (require.cache[__dirname + '/tap4nodeunit.js'])
-        delete require.cache[__dirname + '/tap4nodeunit.js'];
-var tap4nodeunit = require('./tap4nodeunit.js');
-var after = tap4nodeunit.after;
-var before = tap4nodeunit.before;
-var test = tap4nodeunit.test;
-
+import { test, beforEach as before, afterEach as after } from "babel-tap";
 
 // ---- test boolean `log.<level>()` calls
 
-var log1 = bunyan.createLogger({
+var log1 = createLogger({
     name: 'log1',
     streams: [
         {
@@ -34,33 +24,33 @@ var log1 = bunyan.createLogger({
 
 
 test('log.level() -> level num', function (t) {
-    t.equal(log1.level(), bunyan.INFO);
+    t.equal(log1.level(), INFO);
     t.end();
 });
 
 test('log.level(<const>)', function (t) {
-    log1.level(bunyan.DEBUG);
-    t.equal(log1.level(), bunyan.DEBUG);
+    log1.level(DEBUG);
+    t.equal(log1.level(), DEBUG);
     t.end();
 });
 
 test('log.level(<num>)', function (t) {
     log1.level(10);
-    t.equal(log1.level(), bunyan.TRACE);
+    t.equal(log1.level(), TRACE);
     t.end();
 });
 
 test('log.level(<name>)', function (t) {
     log1.level('error');
-    t.equal(log1.level(), bunyan.ERROR);
+    t.equal(log1.level(), ERROR);
     t.end();
 });
 
 // A trick to turn logging off.
 // See <https://github.com/trentm/node-bunyan/pull/148#issuecomment-53232979>.
 test('log.level(FATAL + 1)', function (t) {
-    log1.level(bunyan.FATAL + 1);
-    t.equal(log1.level(), bunyan.FATAL + 1);
+    log1.level(FATAL + 1);
+    t.equal(log1.level(), FATAL + 1);
     t.end();
 });
 
