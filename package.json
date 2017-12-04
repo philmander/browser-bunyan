@@ -3,7 +3,7 @@
   "version": "1.0.0-pre",
   "description": "Bunyan logging specifically for the browser",
   "author": "Phil Mander <philip.mander@gmail.com>",
-  "main": "./lib/bunyan.js",
+  "main": "./lib/index.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/philmander/browser-bunyan.git"
@@ -43,7 +43,7 @@
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/philmander/browser-bunyan/blob/master/LICENSE.txt"
+      "url": "https://github.com/philmander/browser-bunyan/blob/master/LICENSE"
     }
   ],
   "babel": {
