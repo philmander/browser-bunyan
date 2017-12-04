@@ -5,6 +5,7 @@
 /test
 /*.tgz
 /tools
+.idea
 
 rollup.config.js
 .travis.yml
