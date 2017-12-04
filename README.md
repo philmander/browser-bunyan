@@ -13,8 +13,6 @@ tree-shaking this can be reduced further.
 npm install browser-bunyan --save
 ```
 
-or just copy the script from this repository's `/dist` directory.
-
 ## Usage
 
 ### Import
