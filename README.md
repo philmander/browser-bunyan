@@ -1,3 +1,6 @@
+browser-bunyan
+===========
+
 [![Build Status](https://travis-ci.org/philmander/browser-bunyan.svg?branch=master)](https://travis-ci.org/philmander/browser-bunyan)
 
 This package is an adaptation of, the Node logging library, [Bunyan](https://github.com/trentm/node-bunyan) but specifically for the browser.
