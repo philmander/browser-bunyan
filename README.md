@@ -1,12 +1,11 @@
 [![Build Status](https://travis-ci.org/philmander/browser-bunyan.svg?branch=master)](https://travis-ci.org/philmander/browser-bunyan)
 
-I created this project because I wanted a version of, the awesome logging framework, Bunyan specifically for the 
-browser.
+This package is an adaptation of, the Node logging library, [Bunyan](https://github.com/trentm/node-bunyan) but specifically for the browser.
 
-Although Bunyan does support being Browserified, it is still a bit bloated with
+Although Bunyan does support being [Browserified](https://github.com/trentm/node-bunyan#browserify), it is still a bit bloated with
 features which aren't relevant in a browser environment.  You can expect a Browserified and Gzipped `node-bunyan` to
-be around **27kb** whereas `browser-bunyan` is < **4kb**, including its built in log streams. Plus
-`browser-bunyan` also ships with browser-specific log streams.
+be around **27kb** whereas `browser-bunyan` is < **4kb**, including its built-in log streams. With ES Modules and
+tree-shaking this can be reduced further.
 
 ## Install
 
@@ -22,7 +21,7 @@ or just copy the script from this repository's `/dist` directory.
 
 You can access Browser Bunyan's API using:
 
-#### ES imports:
+#### ES modules:
 
 ```javascript
 import { createLogger } from 'browser-bunyan';
@@ -42,7 +41,7 @@ To use as a **global**, include as a standard script tag:
 <script src=node_modules/browser-bunyan/dist/browser-bunyan.min.js></script>
 ```
 
-now `bunyan` will be available on the `window` object
+now `bunyan` will be available as a global.
 
 ```javascript
 const log = bunyan.createLogger(...);
@@ -55,14 +54,14 @@ const log = bunyan.createLogger(...);
 The core library also includes a dedicated browser console stream with nice formatting. Use it like this:
 
 ```javascript
-import { createLogger, ConsoleFormattedStream, serializers } from 'browser-bunyan';
+import { createLogger, ConsoleFormattedStream, INFO, stdSerializers } from 'browser-bunyan';
 
 const log = createLogger({
     name: 'myLogger',
     streams: [
         {
-            level: 'info',
-            stream: ConsoleFormattedStream()
+            level: INFO, // or use the string 'info'
+            stream: new ConsoleFormattedStream()
         }
     ],
     serializers: stdSerializers,
@@ -82,12 +81,12 @@ By default this will use `console.log` for all logging. Pass the option `logByLe
 This logs the raw log record objects directly to the console.
 
 ```javascript
-import { createLogger, ConsoleRawStream } from 'browser-bunyan';
+import { createLogger, ConsoleRawStream, INFO } from 'browser-bunyan';
 
 const log = createLogger({
     name: 'myLogger',
     stream: {
-        level: 'info',
+        level: INFO,
         stream: new ConsoleRawStream()
     }
 });
@@ -107,11 +106,11 @@ in `debug`, then this is inefficient if the log level is higher than 'debug'.
 Therefore you should conditionally execute the logger statement:
 
 ```javascript
-import { INFO, DEBUG, createLogger, ConsoleRawStream } from 'browser-bunyan';
+import { DEBUG, createLogger, ConsoleRawStream } from 'browser-bunyan';
 const log = createLogger({
     name: 'myLogger',
     stream: {
-        level: 'info',
+        level,
         stream: new ConsoleRawStream()
     }
 });
@@ -119,7 +118,7 @@ const log = createLogger({
 // do some stuff
 const req = fetchStuff();
 
-if(log.level <= DEBUG) {
+if(log.level() <= DEBUG) {
     log.debug('Make fetch request');
     log.debug(JSON.stringify(req));
 }
@@ -689,8 +688,6 @@ var log = bunyan.createLogger({
 
 log.info('hi on info');
 ```
-
-
 
 
 # Versioning
