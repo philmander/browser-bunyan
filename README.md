@@ -1,8 +1,12 @@
 [![Build Status](https://travis-ci.org/philmander/browser-bunyan.svg?branch=master)](https://travis-ci.org/philmander/browser-bunyan)
 
 I created this project because I wanted a version of, the awesome logging framework, Bunyan specifically for the 
-browser. Although Bunyan does support being browserified, it is still a bit bloated with 
-features which aren't relevant in a browser environment.
+browser.
+
+Although Bunyan does support being Browserified, it is still a bit bloated with
+features which aren't relevant in a browser environment.  You can expect a Browserified and Gzipped `node-bunyan` to
+be around **27kb** whereas `browser-bunyan` is < **4kb**, including its built in log streams. Plus
+`browser-bunyan` also ships with browser-specific log streams.
 
 ## Install
 
