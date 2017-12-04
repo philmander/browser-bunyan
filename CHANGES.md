@@ -1,5 +1,9 @@
 # bunyan Changelog
 
+## 1.0.0
+- Internals reworked. Better modularization, some ES6 features. Packaged with Rollup
+- ES Modules interface.
+
 ## 0.4.0
 
 - Log object fields with the built-in log streams (`{ obj: obj }`)

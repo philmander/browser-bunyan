@@ -3,10 +3,11 @@
 // to stdout or stderr because this is used for dtrace testing
 // and we don't want to mix output.
 
-var bunyan = require('../lib/bunyan');
-var log = bunyan.createLogger({
+import { createLogger } from '../src/index';
+
+var log = createLogger({
         name: 'play',
-        serializers: bunyan.stdSerializers
+        serializers: stdSerializers
 });
 log.debug({foo: 'bar'}, 'hi at debug')
 log.trace('hi at trace')

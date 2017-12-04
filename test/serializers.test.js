@@ -4,18 +4,14 @@
  * Test the standard serializers in Bunyan.
  */
 
+import { createLogger, stdSerializers } from '../src/index';
+
 var http = require('http');
 
-var bunyan = require('../lib/bunyan');
 var verror = require('verror');
 
-// node-tap API
-if (require.cache[__dirname + '/tap4nodeunit.js'])
-        delete require.cache[__dirname + '/tap4nodeunit.js'];
-var tap4nodeunit = require('./tap4nodeunit.js');
-var after = tap4nodeunit.after;
-var before = tap4nodeunit.before;
-var test = tap4nodeunit.test;
+import { Logger, test, beforEach as before, afterEach as after } from "babel-tap";
+
 
 
 function CapturingStream(recs) {
@@ -27,7 +23,7 @@ CapturingStream.prototype.write = function (rec) {
 
 test('err serializer', function (t) {
     var records = [];
-    var log = bunyan.createLogger({
+    var log = createLogger({
         name: 'serializer-test',
         streams: [
             {
@@ -36,7 +32,7 @@ test('err serializer', function (t) {
             }
         ],
         serializers: {
-            err: bunyan.stdSerializers.err
+            err: stdSerializers.err
         }
     });
 
@@ -77,7 +73,7 @@ test('err serializer: custom serializer', function (t) {
         };
     }
 
-    var log = bunyan.createLogger({
+    var log = createLogger({
         name: 'serializer-test',
         streams: [
             {
@@ -105,14 +101,14 @@ test('err serializer: custom serializer', function (t) {
 
 test('err serializer: long stack', function (t) {
     var records = [];
-    var log = bunyan.createLogger({
+    var log = createLogger({
         name: 'serializer-test',
         streams: [ {
                 stream: new CapturingStream(records),
                 type: 'raw'
         } ],
         serializers: {
-            err: bunyan.stdSerializers.err
+            err: stdSerializers.err
         }
     });
 
@@ -192,14 +188,14 @@ test('err serializer: long stack', function (t) {
 // serializers that don't handle an `undefined` value will blow up.
 test('do not apply serializers if no record key', function (t) {
     var records = [];
-    var log = bunyan.createLogger({
+    var log = createLogger({
         name: 'serializer-test',
         streams: [ {
                 stream: new CapturingStream(records),
                 type: 'raw'
         } ],
         serializers: {
-            err: bunyan.stdSerializers.err,
+            err: stdSerializers.err,
             boom: function (value) {
                 throw new Error('boom');
             }

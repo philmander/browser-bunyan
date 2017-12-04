@@ -1,55 +1,73 @@
 [![Build Status](https://travis-ci.org/philmander/browser-bunyan.svg?branch=master)](https://travis-ci.org/philmander/browser-bunyan)
 
-I created this project because I wanted a version of, the awesome logging framework, Bunyan specifically for the 
-browser. Although Bunyan does support being browserified, it is still a bit bloated with 
-features which aren't relevant in a browser environment.
+This package is an adaptation of, the Node logging library, [Bunyan](https://github.com/trentm/node-bunyan) but specifically for the browser.
+
+Although Bunyan does support being [Browserified](https://github.com/trentm/node-bunyan#browserify), it is still a bit bloated with
+features which aren't relevant in a browser environment.  You can expect a Browserified and Gzipped `node-bunyan` to
+be around **27kb** whereas `browser-bunyan` is < **4kb**, including its built-in log streams. With ES Modules and
+tree-shaking this can be reduced further.
 
 ## Install
 
-Install with NPM or Bower respectively:
-
-`
+```
 npm install browser-bunyan --save
-`
-
-`
-bower install browser-bunyan --save
-`
+```
 
 or just copy the script from this repository's `/dist` directory.
 
 ## Usage
 
+### Import
+
+You can access Browser Bunyan's API using:
+
+#### ES modules:
+
+```javascript
+import { createLogger } from 'browser-bunyan';
+```
+
+#### CommonJS
+
+```javascript
+const { createLogger } = require('browser-bunyan');
+```
+
+#### Browser global
+
 To use as a **global**, include as a standard script tag:
 
-`<script src=node_modules/browser-bunyan/dist/browser-bunyan.min.js></script>`
+```html
+<script src=node_modules/browser-bunyan/dist/browser-bunyan.min.js></script>
+```
 
-now `bunyan` will be available on the `window` object
+now `bunyan` will be available as a global.
 
-Or, to use with **Browserify** or **Webpack**:
-
-`
-var bunyan = require('browser-bunyan');
-`
-
-Naturally, Browser Bunyan can also be *imported* using ES6 module syntax or used with an AMD loader.
+```javascript
+const log = bunyan.createLogger(...);
+```
 
 ### Built-in Log Streams
+
+Bunyan uses "log streams" to customize how each log record is processed. You can write your own to do
+whatever you want or use the built-in log streams which output log records to the console:
 
 #### Formatted Log Stream
 
 The core library also includes a dedicated browser console stream with nice formatting. Use it like this:
 
 ```javascript
-var log = bunyan.createLogger({
+import { createLogger, ConsoleFormattedStream, INFO, stdSerializers } from 'browser-bunyan';
+
+const log = createLogger({
     name: 'myLogger',
     streams: [
         {
-            level: 'info',
-            stream: new bunyan.ConsoleFormattedStream()
+            level: INFO, // or use the string 'info'
+            stream: new ConsoleFormattedStream()
         }
     ],
-    serializers: bunyan.stdSerializers,
+    serializers: stdSerializers,
     src: true
 });
 
@@ -66,20 +84,54 @@ By default this will use `console.log` for all logging. Pass the option `logByLe
 This logs the raw log record objects directly to the console.
 
 ```javascript
-var log = bunyan.createLogger({
+import { createLogger, ConsoleRawStream, INFO } from 'browser-bunyan';
+
+const log = createLogger({
     name: 'myLogger',
     stream: {
-        level: 'info',
-        stream: new bunyan.ConsoleRawStream()
+        level: INFO,
+        stream: new ConsoleRawStream()
     }
 });
+```
+
+### Conditional logging
+
+If a stream's log level is set to `info` then `debug` and `trace` messages will not be
+logged. So this is fine:
+
+```
+logger.debug('Sent fetch request');
+```
+
+However, if you need to do some computation which is passed to your logger statement
+in `debug`, then this is inefficient if the log level is higher than 'debug'.
+Therefore you should conditionally execute the logger statement:
+
+```javascript
+import { DEBUG, createLogger, ConsoleRawStream } from 'browser-bunyan';
+const log = createLogger({
+    name: 'myLogger',
+    stream: {
+        level,
+        stream: new ConsoleRawStream()
+    }
+});
+
+// do some stuff
+const req = fetchStuff();
+
+if(log.level() <= DEBUG) {
+    log.debug('Make fetch request');
+    log.debug(JSON.stringify(req));
+}
 ```
 
 #### Custom log streams
 
 See the Node Bunyan docs below for more information on how to create you own custom stream(s).
 
-### Angular integration:
+### Angular 1.x integration:
 
 Integrate with Angular's log provider:
 
@@ -639,8 +691,6 @@ var log = bunyan.createLogger({
 
 log.info('hi on info');
 ```
-
-
 
 
 # Versioning

@@ -1,9 +1,9 @@
 {
   "name": "browser-bunyan",
-  "version": "0.4.0",
-  "description": "A fork of Bunyan specifically for the browser",
+  "version": "1.0.0-pre",
+  "description": "Bunyan logging specifically for the browser",
   "author": "Phil Mander <philip.mander@gmail.com>",
-  "main": "./lib/bunyan.js",
+  "main": "./lib/index.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/philmander/browser-bunyan.git"
@@ -15,25 +15,40 @@
     "json",
     "bunyan"
   ],
-  "scripts" : {
-    "test" : "node_modules/nodeunit/bin/nodeunit test/*.test.js"
+  "scripts": {
+    "lint": "eslint src",
+    "prepublish": "npm run lint && npm test && npm run build",
+    "build": "babel src --out-dir lib && rollup -c",
+    "test": "babel-tap test/*.test.js"
   },
   "devDependencies": {
-    "browserify": "^9.0.4",
-    "del": "^1.1.1",
-    "gulp": "^3.8.11",
-    "gulp-insert": "^0.5.0",
-    "gulp-jshint": "^1.10.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-uglify": "^1.1.0",
-    "nodeunit": "^0.10.2",
-    "verror": "^1.8.1",
-    "vinyl-source-stream": "^1.1.0"
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.25.0",
+    "babel-eslint": "^7.2.3",
+    "babel-loader": "^6.4.1",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-module-resolver": "^2.7.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.5.2",
+    "babel-tap": "^5.0.0",
+    "eslint": "^4.5.0",
+    "rollup": "^0.52.0",
+    "rollup-plugin-babel": "^3.0.2",
+    "rollup-plugin-commonjs": "^8.2.6",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-uglify": "^2.0.1",
+    "rollup-plugin-uglify-es": "0.0.1"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/philmander/browser-bunyan/blob/master/LICENSE.txt"
+      "url": "https://github.com/philmander/browser-bunyan/blob/master/LICENSE"
     }
-  ]
+  ],
+  "babel": {
+    "presets": [
+      "env"
+    ]
+  }
 }

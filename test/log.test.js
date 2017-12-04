@@ -4,25 +4,17 @@
  * Test the `log.trace(...)`, `log.debug(...)`, ..., `log.fatal(...)` API.
  */
 
-var util = require('util'),
-    format = util.format,
-    inspect = util.inspect;
+import { createLogger } from '../src/index';
+import { format } from '../src/util';
+import { test, beforEach as before, afterEach as after } from "babel-tap";
+
+
 var p = console.log;
-
-var bunyan = require('../lib/bunyan');
-
-// node-tap API
-if (require.cache[__dirname + '/tap4nodeunit.js'])
-        delete require.cache[__dirname + '/tap4nodeunit.js'];
-var tap4nodeunit = require('./tap4nodeunit.js');
-var after = tap4nodeunit.after;
-var before = tap4nodeunit.before;
-var test = tap4nodeunit.test;
 
 
 // ---- test boolean `log.<level>()` calls
 
-var log1 = bunyan.createLogger({
+var log1 = createLogger({
     name: 'log1',
     streams: [
         {
@@ -32,7 +24,7 @@ var log1 = bunyan.createLogger({
     ]
 });
 
-var log2 = bunyan.createLogger({
+var log2 = createLogger({
     name: 'log2',
     streams: [
         {
@@ -74,7 +66,7 @@ Catcher.prototype.write = function (record) {
     this.records.push(record);
 }
 var catcher = new Catcher();
-var log3 = new bunyan.createLogger({
+var log3 = new createLogger({
     name: 'log3',
     streams: [
         {
