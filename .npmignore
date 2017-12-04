@@ -6,5 +6,7 @@
 /*.tgz
 /tools
 
+rollup.config.js
+.travis.yml
 .eslintrc.js
 src
