@@ -12,7 +12,7 @@ tree-shaking this can be reduced further.
 
 ## Current status
 
-Browser Bunyan was originally forked from an already mature library with a rich feature set and stable API. Furthermore, the browser environment is less complex that server (no streams etc). Consequently, I've found it doesn't need much work. Hopefully this is a testament to the quality of the codebase. So, don't be too concerned if you don't see that much activity in this repo. Please do raise issues for bugs, feature requests and ideas.
+Browser Bunyan was originally forked from an already mature library with a rich feature set and stable API. Furthermore, the browser environment is less complex than the server (no real streams etc). Consequently, I've found it doesn't need much work. Hopefully this is a testament to the quality of the codebase. So, don't be too concerned if you don't see that much activity in this repo. Please do raise issues for bugs, feature requests and ideas.
 
 ## Install
 
@@ -92,7 +92,9 @@ log.info('hi on info');
 By default this will use `console.log` for all logging. Pass the option `logByLevel` to the
 `ConsoleFormattedStream` to use the Console API's level specific logging methods (`console.info`, `console.warn`, etc). E.g.
 
-`new ConsoleFormattedStream( { logByLevel: true } );`
+```javascript
+new ConsoleFormattedStream( { logByLevel: true } );
+```
 
 #### Console Raw Stream
 
@@ -162,7 +164,7 @@ All loggers must provide a "name". This is somewhat akin to the log4j logger
 "name", but Bunyan doesn't do hierarchical logger names.
 
 **Bunyan log records are JSON.** A few fields are added automatically:
-"pid", "hostname", "time" and "v".
+"time" and "v".
 
 ```json
     {"name":"myapp","hostname":"banana.local","pid":40161,"level":30,"msg":"hi","time":"2013-01-04T18:46:23.851Z","v":0}
@@ -211,7 +213,7 @@ below for details and suggestions.
 
 ### Streams Introduction
 
-By default, log output is to console and at the "info" level. Explicitly that
+By default, log output is to the browser console and at the "info" level. Explicitly that
 looks like:
 
 ```javascript
