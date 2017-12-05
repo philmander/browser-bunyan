@@ -10,6 +10,10 @@ features which aren't relevant in a browser environment.  You can expect a Brows
 be around **27kb** whereas `browser-bunyan` is < **4kb**, including its built-in log streams. With ES Modules and
 tree-shaking this can be reduced further.
 
+## Current status
+
+Browser Bunyan was originally forked from an already mature library with a rich feature set and stable API. Furthermore, the browser environment is less complex that server (no streams etc). Consequently, I've found it doesn't need much work. Hopefully this is a testament to the quality of the codebase. So, don't be too concerned if you don't see that much activity in this repo. Please do raise issues for bugs, feature requests and ideas.
+
 ## Install
 
 ```
@@ -49,8 +53,7 @@ To use as a **global**, include as a standard script tag:
 now `bunyan` will be available as a global.
 
 ```javascript
-const log = bunyan.createLogger(...);
-const logger = createLogger({ name: 'my-logger' });
+const logger = bunyan.createLogger({ name: 'my-logger' });
 logger.warn('hi on warning');
 ```
 
@@ -61,7 +64,12 @@ whatever you want or use the built-in log streams which output log records to th
 
 #### Formatted Log Stream
 
-The core library also includes a dedicated browser console stream with nice formatting. Use it like this:
+The core library also includes a dedicated browser console stream with nice formatting:
+
+<img src="https://versatile.nl/images/browser-bunyan.png">
+
+
+Use it like this:
 
 ```javascript
 import { createLogger, ConsoleFormattedStream, INFO, stdSerializers } from 'browser-bunyan';
@@ -106,68 +114,17 @@ const log = createLogger({
 
 See the Node Bunyan docs below for more information on how to create you own custom stream(s).
 
-### Conditional logging
-
-If a stream's log level is set to `info` then `debug` and `trace` messages will not be
-logged. So this is fine:
-
-```
-logger.debug('Sent fetch request');
-```
-
-However, if you need to do some computation which is passed to your logger statement
-in `debug`, then this is inefficient when the log level is higher than 'debug'.
-Therefore you should conditionally execute the logger statement:
-
-```javascript
-import { DEBUG, createLogger, ConsoleRawStream } from 'browser-bunyan';
-const log = createLogger({
-    name: 'myLogger',
-    stream: {
-        level,
-        stream: new ConsoleRawStream()
-    }
-});
-
-// do some stuff
-const req = fetchStuff();
-
-if(log.level() <= DEBUG) {
-    log.debug('Make fetch request');
-    log.debug(JSON.stringify(req));
-}
-```
-
-### Angular 1.x integration:
-
-Integrate with Angular's log provider:
-
-```javascript
-adminApp.config(function($provide) {
-    $provide.decorator('$log', function($delegate) {
-        $delegate = bunyan.createLogger({
-            name: 'myLogger',
-            streams: [{
-                level: 'info',
-                stream: new bunyan.ConsoleFormattedStream(),
-            }]
-        });
-        return $delegate;
-    });
-});
-```
-
-### Browser specific features
+## Browser specific features
 
 #### Logging objects to the console
 
-As per, Bunyan's [log API](#log-method-api), if you log an object under the 
+As per, Bunyan's [log API](#log-method-api), if you log an object under the
 field `obj` as the first argument, Browser Bunyan's built-in log streams will log this object
 directly to the console:
 
 ```
 var myObject = { x: 1, y: 2 };
-logger.info({ obj: myObject }, 'This is my object:'); 
+logger.info({ obj: myObject }, 'This is my object:');
 ```
 
 #### Stream types
@@ -175,114 +132,67 @@ logger.info({ obj: myObject }, 'This is my object:');
 Node Bunyan supports various [types of streams](#streams-introduction). In Browser Bunyan, streams
 are always of type 'raw'.
 
-=====================================
+## Features shared with Node Bunyan
 
-## Docs from Bunyan
+**The following docs are the [node-bunyan](https://github.com/trentm/node-bunyan) docs at time of forking, with necessary
+modifications and documentation for the stripped features also removed:**
 
-The following docs are the [node-bunyan](https://github.com/trentm/node-bunyan) docs at time of forking, with necessary 
-modifications and documentation for the stripped features also removed:
-
-Bunyan is **a simple and fast JSON logging library** for node.js services:
-
-    var bunyan = require('browser-bunyan');
-    var log = bunyan.createLogger({name: "myapp"});
-    log.info("hi");
-
-and **a `bunyan` CLI tool** for nicely viewing those logs:
-
-![bunyan CLI screenshot](https://raw.github.com/trentm/node-bunyan/master/tools/screenshot1.png)
-
-Manifesto: Server logs should be structured. JSON's a good format. Let's do
-that. A log record is one line of `JSON.stringify`'d output. Let's also
-specify some common names for the requisite and common fields for a log
-record (see below).
-
-Also: log4j is way more than you need.
-
-
-# Current Status
-
-Solid core functionality is there. Joyent is using this for a number of
-production services. Bunyan supports node 0.6 and greater. Follow
-<a href="https://twitter.com/intent/user?screen_name=trentmick" target="_blank">@trentmick</a>
-for updates to Bunyan.
-
-There is an email discussion list
-[bunyan-logging@googlegroups.com](mailto:bunyan-logging@googlegroups.com),
-also [as a forum in the
-browser](https://groups.google.com/forum/?fromgroups#!forum/bunyan-logging).
-
-
-# Installation
-
-    npm install browser-bunyan
-
-**Tip**: The `bunyan` CLI tool is written to be compatible (within reason) with
-all versions of Bunyan logs. Therefore you might want to `npm install -g bunyan`
-to get the bunyan CLI on your PATH, then use local bunyan installs for
-node.js library usage of bunyan in your apps.
-
-
-# Features
+### Overview of features
 
 - elegant [log method API](#log-method-api)
 - extensible [streams](#streams) system for controlling where log records
-  go (to a stream, to a file, [log file rotation](#stream-type-rotating-file),
-  etc.)
-- [`bunyan` CLI](#cli-usage) for pretty-printing and filtering of Bunyan logs
-- simple include of log call source location (file, line, function) with
+  go (to the console, local storage, the server, etc)
   [`src: true`](#src)
 - lightweight specialization of Logger instances with [`log.child`](#logchild)
 - custom rendering of logged objects with ["serializers"](#serializers)
-- [Runtime log snooping via Dtrace support](#runtime-log-snooping-via-dtrace)
-- Support for [browserify](http://browserify.org/). See [Browserify
-  section](#browserify) below.
 
 
-# Introduction
+### Introduction
 
 Like most logging libraries you create a Logger instance and call methods
 named after the logging levels:
 
-    $ cat hi.js
-    var bunyan = require('browser-bunyan');
-    var log = bunyan.createLogger({name: 'myapp'});
-    log.info('hi');
-    log.warn({lang: 'fr'}, 'au revoir');
-
+```javascript
+const { createLogger } = require('browser-bunyan');
+const log = createLogger({name: 'myapp'});
+log.info('hi');
+log.warn({lang: 'fr'}, 'au revoir');
+```
 All loggers must provide a "name". This is somewhat akin to the log4j logger
 "name", but Bunyan doesn't do hierarchical logger names.
 
 **Bunyan log records are JSON.** A few fields are added automatically:
 "pid", "hostname", "time" and "v".
 
-    $ node hi.js
+```json
     {"name":"myapp","hostname":"banana.local","pid":40161,"level":30,"msg":"hi","time":"2013-01-04T18:46:23.851Z","v":0}
     {"name":"myapp","hostname":"banana.local","pid":40161,"level":40,"lang":"fr","msg":"au revoir","time":"2013-01-04T18:46:23.853Z","v":0}
+```
 
-
-## Log Method API
+### Log Method API
 
 The example above shows two different ways to call `log.info(...)`. The
 full API is:
 
-    log.info();     // Returns a boolean: is the "info" level enabled?
-                    // This is equivalent to `log.isInfoEnabled()` or
-                    // `log.isEnabledFor(INFO)` in log4j.
+```javascript
+log.info();     // Returns a boolean: is the "info" level enabled?
+                // This is equivalent to `log.isInfoEnabled()` or
+                // `log.isEnabledFor(INFO)` in log4j.
 
-    log.info('hi');                     // Log a simple string message (or number).
-    log.info('hi %s', bob, anotherVar); // Uses `util.format` for msg formatting.
+log.info('hi');                     // Log a simple string message (or number).
+log.info('hi %s', bob, anotherVar); // Uses `util.format` for msg formatting.
 
-    log.info({foo: 'bar'}, 'hi');
-                    // Adds "foo" field to log record. You can add any number
-                    // of additional fields here.
+log.info({foo: 'bar'}, 'hi');
+                // Adds "foo" field to log record. You can add any number
+                // of additional fields here.
 
-    log.info(err);  // Special case to log an `Error` instance to the record.
-                    // This adds an "err" field with exception details
-                    // (including the stack) and sets "msg" to the exception
-                    // message.
-    log.info(err, 'more on this: %s', more);
-                    // ... or you can specify the "msg".
+log.info(err);  // Special case to log an `Error` instance to the record.
+                // This adds an "err" field with exception details
+                // (including the stack) and sets "msg" to the exception
+                // message.
+log.info(err, 'more on this: %s', more);
+                // ... or you can specify the "msg".
+```
 
 Note that this implies **you cannot pass any object as the first argument
 to log it**. IOW, `log.info(mywidget)` may not be what you expect. Instead
@@ -299,39 +209,43 @@ The same goes for all of Bunyan's log levels: `log.trace`, `log.debug`,
 `log.info`, `log.warn`, `log.error`, and `log.fatal`. See the [levels section](#levels)
 below for details and suggestions.
 
+### Streams Introduction
 
-## Streams Introduction
-
-By default, log output is to stdout and at the "info" level. Explicitly that
+By default, log output is to console and at the "info" level. Explicitly that
 looks like:
 
-    var log = bunyan.createLogger({
-        name: 'myapp',
-        stream: process.stdout,
-        level: 'info'
-    });
+```javascript
+import { createLogger, ConsoleRawStream } from 'browser-bunyan';
+var log = createLogger({
+    name: 'myapp',
+    stream: new ConsoleRawStream()
+    level: 'info'
+});
+```
 
 That is an abbreviated form for a single stream. **You can define multiple
 streams at different levels**.
 
-    var log = bunyan.createLogger({
-      name: 'myapp',
-      streams: [
-        {
-          level: 'info',
-          stream: process.stdout            // log INFO and above to stdout
-        },
-        {
-          level: 'error',
-          path: '/var/tmp/myapp-error.log'  // log ERROR and above to a file
-        }
-      ]
-    });
+```javascript
+const log = createLogger({
+  name: 'myapp',
+  streams: [
+    {
+      level: 'info',
+      stream: new ConsoleRawStream()  // log INFO and above to console
+    },
+    {
+      level: 'error',
+      path: new PostToServerStream()  // record errors on the server
+    }
+  ]
+});
+```
 
 More on streams in the [Streams section](#streams) below.
 
 
-## log.child
+### log.child
 
 Bunyan has a concept of a child logger to **specialize a logger for a
 sub-component of your application**, i.e. to create a new logger with
@@ -342,8 +256,9 @@ In the following example, logging on a "Wuzzle" instance's `this.log` will
 be exactly as on the parent logger with the addition of the `widget_type`
 field:
 
-    var bunyan = require('browser-bunyan');
-    var log = bunyan.createLogger({name: 'myapp'});
+```javascript
+    const { createLogger } = require('browser-bunyan');
+    const log = createLogger({name: 'myapp'});
 
     function Wuzzle(options) {
         this.log = options.log.child({widget_type: 'wuzzle'});
@@ -357,37 +272,18 @@ field:
     var wuzzle = new Wuzzle({log: log});
     wuzzle.woos();
     log.info('done');
+```    
 
 Running that looks like (raw):
 
-    $ node myapp.js
-    {"name":"myapp","hostname":"myhost","pid":34572,"level":30,"msg":"start","time":"2013-01-04T07:47:25.814Z","v":0}
-    {"name":"myapp","hostname":"myhost","pid":34572,"widget_type":"wuzzle","level":30,"msg":"creating a wuzzle","time":"2013-01-04T07:47:25.815Z","v":0}
-    {"name":"myapp","hostname":"myhost","pid":34572,"widget_type":"wuzzle","level":40,"msg":"This wuzzle is woosey.","time":"2013-01-04T07:47:25.815Z","v":0}
-    {"name":"myapp","hostname":"myhost","pid":34572,"level":30,"msg":"done","time":"2013-01-04T07:47:25.816Z","v":0}
+```json
+{"name":"myapp","level":30,"msg":"start","time":"2013-01-04T07:47:25.814Z"}
+{"name":"myapp","widget_type":"wuzzle","level":30,"msg":"creating a wuzzle","time":"2013-01-04T07:47:25.815Z"}
+{"name":"myapp","widget_type":"wuzzle","level":40,"msg":"This wuzzle is woosey.","time":"2013-01-04T07:47:25.815Z"}
+{"name":"myapp","level":30,"msg":"done","time":"2013-01-04T07:47:25.816Z"}
+```
 
-And with the `bunyan` CLI (using the "short" output mode):
-
-    $ node myapp.js  | bunyan -o short
-    07:46:42.707Z  INFO myapp: start
-    07:46:42.709Z  INFO myapp: creating a wuzzle (widget_type=wuzzle)
-    07:46:42.709Z  WARN myapp: This wuzzle is woosey. (widget_type=wuzzle)
-    07:46:42.709Z  INFO myapp: done
-
-
-A more practical example is in the
-[node-restify](https://github.com/mcavage/node-restify) web framework.
-Restify uses Bunyan for its logging. One feature of its integration, is that
-if `server.use(restify.requestLogger())` is used, each restify request handler
-includes a `req.log` logger that is:
-
-    log.child({req_id: <unique request id>}, true)
-
-Apps using restify can then use `req.log` and have all such log records
-include the unique request id (as "req\_id"). Handy.
-
-
-## Serializers
+### Serializers
 
 Bunyan has a concept of **"serializers" to produce a JSON-able object from a
 JavaScript object**, so you can easily do the following:
@@ -397,53 +293,62 @@ JavaScript object**, so you can easily do the following:
 Serializers is a mapping of log record field name, "req" in this example, to
 a serializer function. That looks like this:
 
-    function reqSerializer(req) {
-        return {
-            method: req.method,
-            url: req.url,
-            headers: req.headers
-        }
+```javascript
+function reqSerializer(req) {
+    return {
+        method: req.method,
+        url: req.url,
+        headers: req.headers
     }
-    var log = bunyan.createLogger({
-        name: 'myapp',
-        serializers: {
-            req: reqSerializer
-        }
-    });
+}
+
+const log = createLogger({
+    name: 'myapp',
+    serializers: {
+        req: reqSerializer
+    }
+});
+```
 
 Or this:
+```javascript
+import { createLogger, stdSerializers } from 'browser-bunyan';
 
-    var log = bunyan.createLogger({
-        name: 'myapp',
-        serializers: {req: bunyan.stdSerializers.req}
-    });
+const log = createLogger({
+    name: 'myapp',
+    serializers: {req: stdSerializers.req}
+});
+```
 
 because Bunyan includes a small set of standard serializers. To use all the
 standard serializers you can use:
 
-    var log = bunyan.createLogger({
+```javascript
+    import { createLogger, stdSerializers } from 'browser-bunyan';
+    const log = createLogger({
       ...
-      serializers: bunyan.stdSerializers
+      serializers: stdSerializers
     });
+```
 
 **Note**: Your own serializers should never throw, otherwise you'll get an
 ugly message on stderr from Bunyan (along with the traceback) and the field
 in your log record will be replaced with a short error message.
 
-# Levels
+### Levels
 
 The log levels in bunyan are as follows. The level descriptions are best
 practice *opinions*.
 
-- "fatal" (60): The service/app is going to stop or become unusable now.
+- `fatal` (60): The service/app is going to stop or become unusable now.
   An operator should definitely look into this soon.
-- "error" (50): Fatal for a particular request, but the service/app continues
+- `error` (50): Fatal for a particular request, but the service/app continues
   servicing other requests. An operator should look at this soon(ish).
-- "warn" (40): A note on something that should probably be looked at by an
+- `warn` (40): A note on something that should probably be looked at by an
   operator eventually.
-- "info" (30): Detail on regular operation.
-- "debug" (20): Anything else, i.e. too verbose to be included in "info" level.
-- "trace" (10): Logging from external libraries used by your app or *very*
+- `info` (30): Detail on regular operation.
+- `debug` (20): Anything else, i.e. too verbose to be included in "info" level.
+- `trace` (10): Logging from external libraries used by your app or *very*
   detailed application logging.
 
 Suggestions: Use "debug" sparingly. Information that will be useful to debug
@@ -458,22 +363,23 @@ The lowercase level names are aliases supported in the API.
 
 Here is the API for changing levels in an existing logger:
 
-    log.level() -> INFO   // gets current level (lowest level of all streams)
+```javascript
+log.level() -> INFO   // gets current level (lowest level of all streams)
 
-    log.level(INFO)       // set all streams to level INFO
-    log.level("info")     // set all streams to level INFO
+log.level(INFO)       // set all streams to level INFO
+log.level("info")     // set all streams to level INFO
 
-    log.levels() -> [DEBUG, INFO]   // get array of levels of all streams
-    log.levels(0) -> DEBUG          // get level of stream at index 0
-    log.levels("foo")               // get level of stream with name "foo"
+log.levels() -> [DEBUG, INFO]   // get array of levels of all streams
+log.levels(0) -> DEBUG          // get level of stream at index 0
+log.levels("foo")               // get level of stream with name "foo"
 
-    log.levels(0, INFO)             // set level of stream 0 to INFO
-    log.levels(0, "info")           // can use "info" et al aliases
-    log.levels("foo", WARN)         // set stream named "foo" to WARN
+log.levels(0, INFO)             // set level of stream 0 to INFO
+log.levels(0, "info")           // can use "info" et al aliases
+log.levels("foo", WARN)         // set stream named "foo" to WARN
+```
 
 
-
-# Log Record Fields
+### Log Record Fields
 
 This section will describe *rules* for the Bunyan log format: field names,
 field meanings, required fields, etc. However, a Bunyan library doesn't
@@ -490,30 +396,31 @@ incorrect signature) is always a bug in Bunyan.**
 
 A typical Bunyan log record looks like this:
 
-    {"name":"myserver","hostname":"banana.local","pid":123,"req":{"method":"GET","url":"/path?q=1#anchor","headers":{"x-hi":"Mom","connection":"close"}},"level":3,"msg":"start request","time":"2012-02-03T19:02:46.178Z","v":0}
+```json
+{"name":"myapp","req":{"method":"GET","url":"/path?q=1#anchor","headers":{"x-hi":"Mom","connection":"close"}},"level":3,"msg":"start request","time":"2012-02-03T19:02:46.178Z","v":0}
+```
 
 Pretty-printed:
 
-    {
-      "name": "myserver",
-      "hostname": "banana.local",
-      "pid": 123,
-      "req": {
-        "method": "GET",
-        "url": "/path?q=1#anchor",
-        "headers": {
-          "x-hi": "Mom",
-          "connection": "close"
-        },
-        "remoteAddress": "120.0.0.1",
-        "remotePort": 51244
-      },
-      "level": 3,
-      "msg": "start request",
-      "time": "2012-02-03T19:02:57.534Z",
-      "v": 0
-    }
-
+```json
+{
+  "name": "myapp",
+  "req": {
+    "method": "GET",
+    "url": "/path?q=1#anchor",
+    "headers": {
+      "x-hi": "Mom",
+      "connection": "close"
+    },
+    "remoteAddress": "120.0.0.1",
+    "remotePort": 51244
+  },
+  "level": 3,
+  "msg": "send request",
+  "time": "2012-02-03T19:02:57.534Z",
+  "v": 0
+}
+```
 
 Core fields:
 
@@ -528,7 +435,6 @@ Core fields:
 - `name`: Required. String. Provided at Logger creation.
   You must specify a name for your logger when creating it. Typically this
   is the name of the service/app using Bunyan for logging.
-- `pid`: Required. Integer. Filled in automatically at Logger creation.
 - `time`: Required. String. Added by Bunyan. Can be overriden.
   The date and time of the event in [ISO 8601
   Extended Format](http://en.wikipedia.org/wiki/ISO_8601) format and in UTC,
@@ -551,165 +457,78 @@ Recommended/Best Practice Fields:
 - `err`: Object. A caught JS exception. Log that thing with `log.info(err)`
     to get:
 
-        ...
+```
         "err": {
           "message": "boom",
           "name": "TypeError",
           "stack": "TypeError: boom\n    at Object.<anonymous> ..."
         },
         "msg": "boom",
-        ...
+```
 
     Or use the `bunyan.stdSerializers.err` serializer in your Logger and
     do this `log.error({err: err}, "oops")`. See "examples/err.js".
 
-# Streams
+### Streams
 
 A "stream" is Bunyan's name for an output for log messages (the equivalent
-to a log4j Appender). Ultimately Bunyan uses a
-[Writable Stream](http://nodejs.org/docs/latest/api/all.html#writable_Stream)
-interface, but there are some additional attributes used to create and
-manage the stream. A Bunyan Logger instance has one or more streams.
+to a log4j Appender). A Bunyan Logger instance has one or more streams.
 In general streams are specified with the "streams" option:
 
-    var bunyan = require('browser-bunyan');
-    var log = bunyan.createLogger({
-        name: "foo",
-        streams: [
-            {
-                stream: process.stderr,
-                level: "debug"
-            },
-            ...
-        ]
-    });
+```javascript
+const bunyan = require('browser-bunyan');
+const log = createLogger({
+    name: "foo",
+    streams: [
+        {
+            stream: new ConsoleRawStream(),
+            level: "debug"
+        },
+        ...
+    ]
+});
+```
 
 For convenience, if there is only one stream, it can specified with the
 "stream" and "level" options (internally converted to a `Logger.streams`).
 
-    var log = bunyan.createLogger({
-        name: "foo",
-        stream: process.stderr,
-        level: "debug"
-    });
-
-Note that "file" streams do not support this shortcut (partly for historical
-reasons and partly to not make it difficult to add a literal "path" field
-on log records).
+```javascript
+const log = createLogger({
+    name: "foo",
+    stream: new ConsoleRawStream(),
+    level: "debug"
+});
+```
 
 If neither "streams" nor "stream" are specified, the default is a stream of
-type "stream" emitting to `process.stdout` at the "info" level.
+type `ConsoleRawStream` at the "info" level.
 
-## stream type: `raw`
+### stream type: `raw`
 
-- `raw`: Similar to a "stream" writeable stream, except that the write method
-  is given raw log record *Object*s instead of a JSON-stringified string.
-  This can be useful for hooking on further processing to all Bunyan logging:
-  pushing to an external service, a RingBuffer (see below), etc.
-  
 Note that in browser-bunyan streams are always `raw`
 
 
-# Browserify
+## Inegrations
 
-As the [Browserify](http://browserify.org/) site says it "lets you
-`require('modules')` in the browser by bundling up all of your dependencies."
-It is a build tool to run on your node.js script to bundle up your script and
-all its node.js dependencies into a single file that is runnable in the
-browser via:
+### Angular 1.x integration:
 
-    <script src="play.browser.js"></script>
-
-As of version 1.1.0, node-bunyan supports being run via Browserify. The
-default [stream](#streams) when running in the browser is one that emits
-raw log records to `console.log/info/warn/error`.
-
-Here is a quick example showing you how you can get this working for your
-script.
-
-1. Get browserify and bunyan installed in your module:
-
-
-        $ npm install browserify bunyan
-
-2. An example script using Bunyan, "play.js":
-
-    ```javascript
-    var bunyan = require('browser-bunyan');
-    var log = bunyan.createLogger({name: 'play', level: 'debug'});
-    log.trace('this one does not emit');
-    log.debug('hi on debug');   // console.log
-    log.info('hi on info');     // console.info
-    log.warn('hi on warn');     // console.warn
-    log.error('hi on error');   // console.error
-    ```
-
-3. Build this into a bundle to run in the browser, "play.browser.js":
-
-        $ ./node_modules/.bin/browserify play.js -o play.browser.js
-
-4. Put that into an HTML file, "play.html":
-
-    ```html
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="utf-8">
-      <script src="play.browser.js"></script>
-    </head>
-    <body>
-      <div>hi</div>
-    </body>
-    </html>
-    ```
-
-5. Open that in your browser and open your browser console:
-
-        $ open play.html
-
-
-Here is what it looks like in Firefox's console: ![Bunyan + Browserify in the
-Firefox console](./docs/img/bunyan.browserify.png)
-
-For some, the raw log records might not be desired. To have a rendered log line
-you'll want to add your own stream, starting with something like this:
+Integrate with Angular's log provider:
 
 ```javascript
-var bunyan = require('./lib/bunyan');
-
-function MyRawStream() {}
-MyRawStream.prototype.write = function (rec) {
-    console.log('[%s] %s: %s',
-        rec.time.toISOString(),
-        bunyan.nameFromLevel[rec.level],
-        rec.msg);
-}
-
-var log = bunyan.createLogger({
-    name: 'play',
-    streams: [
-        {
-            level: 'info',
-            stream: new MyRawStream(),
-            type: 'raw'
-        }
-    ]
+adminApp.config(function($provide) {
+    $provide.decorator('$log', function($delegate) {
+        $delegate = bunyan.createLogger({
+            name: 'myLogger',
+            streams: [{
+                level: 'info',
+                stream: new bunyan.ConsoleFormattedStream(),
+            }]
+        });
+        return $delegate;
+    });
 });
-
-log.info('hi on info');
 ```
 
+## License
 
-# Versioning
-
-The scheme I follow is most succintly described by the bootstrap guys
-[here](https://github.com/twitter/bootstrap#versioning).
-
-tl;dr: All versions are `<major>.<minor>.<patch>` which will be incremented for
-breaking backward compat and major reworks, new features without breaking
-change, and bug fixes, respectively.
-
-
-# License
-
-MIT. See "LICENSE.txt".
+MIT. See LICENSE.
