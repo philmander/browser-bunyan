@@ -26,12 +26,16 @@ You can access Browser Bunyan's API using:
 
 ```javascript
 import { createLogger } from 'browser-bunyan';
+const logger = createLogger({ name: 'my-logger' });
+logger.info('hi on info');
 ```
 
 #### CommonJS
 
 ```javascript
 const { createLogger } = require('browser-bunyan');
+const logger = createLogger({ name: 'my-logger' });
+logger.debug('hi on debug');
 ```
 
 #### Browser global
@@ -39,13 +43,15 @@ const { createLogger } = require('browser-bunyan');
 To use as a **global**, include as a standard script tag:
 
 ```html
-<script src=node_modules/browser-bunyan/dist/browser-bunyan.min.js></script>
+<script src="node_modules/browser-bunyan/dist/browser-bunyan.min.js"></script>
 ```
 
 now `bunyan` will be available as a global.
 
 ```javascript
 const log = bunyan.createLogger(...);
+const logger = createLogger({ name: 'my-logger' });
+logger.warn('hi on warning');
 ```
 
 ### Built-in Log Streams
