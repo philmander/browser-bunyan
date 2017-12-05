@@ -1,5 +1,9 @@
 # bunyan Changelog
 
+## 1.0.1
+- Major README updates
+- Restore missing `v` field in log record
+
 ## 1.0.0
 - Internals reworked. Better modularization, some ES6 features. Packaged with Rollup
 - ES Modules interface.
