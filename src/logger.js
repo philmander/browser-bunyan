@@ -2,7 +2,7 @@ import { TRACE, DEBUG, INFO, WARN, ERROR, FATAL, nameFromLevel, resolveLevel} fr
 import { format, _haveWarned, _warn, extractSrcFromStacktrace, _indent, objCopy, safeCycles, CALL_STACK_ERROR } from './util';
 import { ConsoleRawStream} from './console-raw-stream';
 
-const LOG_VERSION = 0;
+const LOG_VERSION = 1;
 
 //---- Logger class
 
