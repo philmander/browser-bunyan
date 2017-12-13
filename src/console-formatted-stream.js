@@ -15,7 +15,7 @@ const DEFAULT_CSS = {
 
 export class ConsoleFormattedStream {
 
-    constructor({ logByLevel = false} = {}, css = DEFAULT_CSS) {
+    constructor({ logByLevel = false, css = DEFAULT_CSS } = {}) {
         this.logByLevel = logByLevel;
         this.css = css;
     }
@@ -84,5 +84,9 @@ export class ConsoleFormattedStream {
         if (rec.obj) {
             consoleMethod.call(console, rec.obj);
         }
+    }
+
+    static getDefaultCss() {
+        return DEFAULT_CSS;
     }
 }

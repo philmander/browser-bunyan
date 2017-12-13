@@ -19,7 +19,6 @@
                 {
                     level: 'trace',
                     stream: new bunyan.ConsoleRawStream(),
-
                 }
             ]
         });
@@ -37,13 +36,16 @@
         rawLogger.fatal(err, 'This is a %s log with an error object using a %s stream', 'fatalgul', 'raw');
         rawLogger.info(obj, 'This is an %s log with an object using a %s stream', 'info', 'raw');
 
+        var css = bunyan.ConsoleFormattedStream.getDefaultCss();
+        css.msg = 'color: teal';
         var formattedLogger = bunyan.createLogger({
             name: 'formatted',
             streams: [
                 {
                     level: 'trace',
                     stream: new bunyan.ConsoleFormattedStream({
-                        logByLevel: false
+                        logByLevel: false,
+                        css,
                     }),
 
                 }

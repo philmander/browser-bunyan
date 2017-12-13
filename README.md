@@ -96,6 +96,34 @@ By default this will use `console.log` for all logging. Pass the option `logByLe
 new ConsoleFormattedStream( { logByLevel: true } );
 ```
 
+The colors/css used by `ConsoleFormattedStream` are customizable:
+
+```
+new ConsoleFormattedStream({
+    css: {
+        levels : {
+            trace: 'color: DeepPink',
+            debug: 'color: GoldenRod',
+            info: 'color: DarkTurquoise',
+            warm: 'color: Purple',
+            error: 'color: Crimson',
+            fatal: 'color: Black',
+        },
+        def: 'color: DimGray',
+        msg : 'color: SteelBlue',
+        src : 'color: DimGray; font-style: italic; font-size: 0.9em',
+    }
+});
+```
+
+or
+
+```
+const css = ConsoleFormattedStream.getDefaultCss();
+css.msg = 'color: cyan';
+new ConsoleFormattedStream({ css });
+```
+
 #### Console Raw Stream
 
 This logs the raw log record objects directly to the console.
