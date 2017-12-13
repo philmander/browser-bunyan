@@ -46,7 +46,8 @@ export class ConsoleFormattedStream {
         const padZeros = (number, len) => Array((len + 1) - (number + '').length).join('0') + number;
 
         const logArgs = [];
-        logArgs.push('[%s:%s:%s:%s] %c%s%c: %s: %c%s %c%s');
+        // [time] level: loggerName: msg src?
+        logArgs.push(`[%s:%s:%s:%s] %c%s%c: %s: %c%s ${rec.src ? '%c%s' : ''}`);
         logArgs.push(padZeros(rec.time.getHours(), 2));
         logArgs.push(padZeros(rec.time.getMinutes(), 2));
         logArgs.push(padZeros(rec.time.getSeconds(), 2));
