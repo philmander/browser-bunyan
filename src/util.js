@@ -5,12 +5,16 @@ export const CALL_STACK_ERROR = 'call-stack-error';
  * exceptions, so this function attempts to handle non-objects gracefully.
  */
 export function objCopy(obj) {
-    if (typeof obj === 'undefined' || obj === null) {  // null or undefined
+    if (typeof  obj === 'undefined' || obj ===  null) {  // null or undefined
         return obj;
     } else if (Array.isArray(obj)) {
         return obj.slice();
     } else if (typeof (obj) === 'object') {
-        return Object.assign({}, obj);
+        const copy = {};
+        Object.keys(obj).forEach(function (k) {
+            copy[k] = obj[k];
+        });
+        return copy;
     } else {
         return obj;
     }
