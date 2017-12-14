@@ -12,20 +12,18 @@ export default {
     name: 'bunyan',
     plugins: [
         resolve(),
-        //commonjs(),
         babel({
-            babelrc: false,
-
-            "presets": [
+            'babelrc': false,
+            'presets': [
                 [
-                    "env",
+                    'env',
                     {
-                        "modules": false
+                        'modules': false,
                     }
                 ]
             ],
-            "plugins": [
-                "external-helpers"
+            'plugins': [
+                'external-helpers'
             ],
             exclude: 'node_modules/**'
         }),
