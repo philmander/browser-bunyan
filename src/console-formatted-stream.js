@@ -1,12 +1,12 @@
 import { TRACE, DEBUG, INFO, WARN, ERROR, FATAL, nameFromLevel } from './levels';
 const DEFAULT_CSS = {
     levels : {
-        [TRACE] : 'color: DeepPink',
-        [DEBUG] : 'color: GoldenRod',
-        [INFO] : 'color: DarkTurquoise',
-        [WARN] : 'color: Purple',
-        [ERROR] : 'color: Crimson',
-        [FATAL] : 'color: Black',
+        trace : 'color: DeepPink',
+        debug : 'color: GoldenRod',
+        info : 'color: DarkTurquoise',
+        warn : 'color: Purple',
+        error : 'color: Crimson',
+        fatal : 'color: Black',
     },
     def: 'color: DimGray',
     msg : 'color: SteelBlue',
@@ -44,17 +44,17 @@ export class ConsoleFormattedStream {
         }
 
         if (rec.level < DEBUG) {
-            levelCss = this.css.levels[TRACE];
+            levelCss = this.css.levels.trace;
         } else if (rec.level < INFO) {
-            levelCss = this.css.levels[DEBUG];
+            levelCss = this.css.levels.debug;
         } else if (rec.level < WARN) {
-            levelCss = this.css.levels[INFO];
+            levelCss = this.css.levels.info;
         } else if (rec.level < ERROR) {
-            levelCss = this.css.levels[WARN];
+            levelCss = this.css.levels.warn;
         } else if (rec.level < FATAL) {
-            levelCss = this.css.levels[ERROR];
+            levelCss = this.css.levels.error;
         } else {
-            levelCss = this.css.levels[FATAL];
+            levelCss = this.css.levels.fatal;
         }
 
         const padZeros = (number, len) => Array((len + 1) - (number + '').length).join('0') + number;

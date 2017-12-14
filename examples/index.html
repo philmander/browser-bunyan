@@ -38,6 +38,7 @@
 
         var css = bunyan.ConsoleFormattedStream.getDefaultCss();
         css.msg = 'color: teal';
+        css.levels.error = 'text-decoration: underline; color: red';
         var formattedLogger = bunyan.createLogger({
             name: 'formatted',
             streams: [
