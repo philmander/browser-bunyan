@@ -47,7 +47,7 @@ logger.debug('hi on debug');
 To use as a **global**, include as a standard script tag:
 
 ```html
-<script src="//unpkg.com/browser-bunyan@1.2.1/dist/browser-bunyan.min.js"></script>
+<script src="//unpkg.com/browser-bunyan@1.2.2/dist/browser-bunyan.min.js"></script>
 ```
 
 now `bunyan` will be available as a global.
