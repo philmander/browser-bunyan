@@ -4,6 +4,7 @@
   "description": "Bunyan logging specifically for the browser",
   "author": "Phil Mander <philip.mander@gmail.com>",
   "main": "./lib/index.js",
+  "module" : "./lib/index.m.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/philmander/browser-bunyan.git"
@@ -18,25 +19,16 @@
   "scripts": {
     "lint": "eslint src",
     "prepublish": "npm run lint && npm test && npm run build",
-    "build": "babel src --out-dir lib && rollup -c",
+    "build": "microbundle --name bunyan && mkdirp dist && cp lib/index.umd.js dist/browser-bunyan.min.js",
     "test": "babel-tap test/*.test.js"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
     "babel-core": "^6.25.0",
     "babel-eslint": "^7.2.3",
-    "babel-loader": "^6.4.1",
-    "babel-plugin-external-helpers": "^6.22.0",
-    "babel-plugin-module-resolver": "^2.7.1",
     "babel-preset-env": "^1.5.2",
     "babel-tap": "^5.0.0",
     "eslint": "^4.5.0",
-    "rollup": "^0.52.0",
-    "rollup-plugin-babel": "^3.0.2",
-    "rollup-plugin-commonjs": "^8.2.6",
-    "rollup-plugin-node-resolve": "^3.0.0",
-    "rollup-plugin-uglify": "^2.0.1",
-    "rollup-plugin-uglify-es": "0.0.1"
+    "microbundle": "^0.2.4"
   },
   "licenses": [
     {
