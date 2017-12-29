@@ -29,5 +29,6 @@ export {
 } from './util';
 
 //streams
-export { ConsoleFormattedStream } from './console-formatted-stream';
-export { ConsoleRawStream } from './console-raw-stream';
+export { ConsoleFormattedStream } from './streams/console-formatted-stream';
+export { ConsoleRawStream } from './streams/console-raw-stream';
+export { ServerLogStream } from './streams/server-stream';

@@ -1,4 +1,4 @@
-import { INFO, WARN, ERROR } from './levels';
+import { INFO, WARN, ERROR } from '../levels';
 
 export class ConsoleRawStream {
     write(rec) {

@@ -1,6 +1,6 @@
 import { TRACE, DEBUG, INFO, WARN, ERROR, FATAL, nameFromLevel, resolveLevel} from './levels';
 import { format, _haveWarned, _warn, extractSrcFromStacktrace, _indent, objCopy, safeCycles, CALL_STACK_ERROR } from './util';
-import { ConsoleRawStream} from './console-raw-stream';
+import { ConsoleRawStream } from './streams/console-raw-stream';
 
 const LOG_VERSION = 1;
 
