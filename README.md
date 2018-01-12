@@ -142,7 +142,9 @@ const log = createLogger({
 
 #### Custom log streams
 
-See the Node Bunyan docs below for more information on how to create you own custom stream(s).
+See the Node Bunyan docs below for more information on how to create you own custom stream(s). 
+
+This [gist for a "server-stream"](https://gist.github.com/philmander/7788b680acb776bab4ae67df63db227a) is also good example of how to write a log stream that sends log records to the server. 
 
 ## Browser specific features
 
