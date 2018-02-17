@@ -13,8 +13,6 @@ global.window = {
     }
 };
 
-import { Logger } from '../../browser-bunyan/src/index';
-
 import { test } from "babel-tap";
 
 import { ServerStream } from '../src';
@@ -49,20 +47,16 @@ test('default behavior', function (t) {
         }
     };
 
-    const log = new Logger({
-        name: 'server-stream-test',
-        streams: [{
-            stream: new ServerStream({ throttleInterval: 500 }),
-        }],
-    });
-    log.info('one');
-    log.info('one');
-    log.info({two: 'deux'}, 'two');
+    const stream = new ServerStream({ throttleInterval: 500 });
+
+    stream.write({ msg: 'one' });
+    stream.write({ msg: 'one' });
+    stream.write({ two: 'deux', msg: 'two'});
 
     setTimeout(() => {
-        log.info('three');
+        stream.write({ msg: 'three' });
         setTimeout(() => {
-            log.info('four');
+            stream.write({ msg: 'four'});
         }, 100);
     }, 700);
 });
@@ -79,20 +73,15 @@ test('customize behavior', function (t) {
         t.end();
     };
 
-    const log = new Logger({
-        name: 'server-stream-test',
-        streams: [{
-            stream: new ServerStream({
-                throttleInterval: 10,
-                method: 'POST',
-                url: '/things',
-                withCredentials: true,
-            }),
-        }],
+    const stream = new ServerStream({
+        throttleInterval: 10,
+        method: 'POST',
+        url: '/things',
+        withCredentials: true,
     });
-    log.info('one');
-    log.info('two');
-    log.info('three');
+    stream.write({ msg: 'one' });
+    stream.write({ msg: 'two' });
+    stream.write({ msg: 'three' });
 });
 
 test('does not attempt to log offline', function (t) {
@@ -107,11 +96,6 @@ test('does not attempt to log offline', function (t) {
         throttleInterval: 100
     });
 
-    const log = new Logger({
-        name: 'server-stream-test',
-        streams: [{ stream }],
-    });
-    log.info('one');
     setTimeout(() => {
         t.equal(reqSent, false);
         window.navigator.onLine = true;
@@ -125,19 +109,14 @@ test('custom xhr error handler', function (t) {
         xhr.respond(400);
     };
 
-    const log = new Logger({
-        name: 'server-stream-test',
-        streams: [{
-            stream: new ServerStream({
-                throttleInterval: 100,
-                onError: function(records, xhr) {
-                    t.equal(xhr.url, '/log');
-                    t.equal(records.length, 1);
-                    this.stop();
-                    t.end()
-                },
-            }),
-        }],
+    const stream = new ServerStream({
+        throttleInterval: 100,
+        onError: function(records, xhr) {
+            t.equal(xhr.url, '/log');
+            t.equal(records.length, 1);
+            this.stop();
+            t.end()
+        },
     });
-    log.info('one');
+    stream.write({ msg: 'one' });
 });
