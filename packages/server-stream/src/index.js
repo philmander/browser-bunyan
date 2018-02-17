@@ -1,11 +1,11 @@
 const userAgent = typeof window !== 'undefined' ? window.navigator.userAgent : 'no-window';
 const isBot = /bot|crawler|spider|crawling/i.test(userAgent);
 
-export class ServerLogStream {
+export class ServerStream {
 
     constructor(opts = {}) {
         const {
-            writeCondition = ServerLogStream.defaultWriteCondition,
+            writeCondition = ServerStream.defaultWriteCondition,
         } = opts;
 
         this.opts = opts;
