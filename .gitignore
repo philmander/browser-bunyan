@@ -1,9 +1,9 @@
 /tmp
-/node_modules
 *.log
 !/test/corpus/*.log
 /*.tgz
 .idea
 
-/dist
-/lib
+dist
+lib
+node_modules

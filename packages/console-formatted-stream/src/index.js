@@ -1,4 +1,4 @@
-import { TRACE, DEBUG, INFO, WARN, ERROR, FATAL, nameFromLevel } from './levels';
+import { TRACE, DEBUG, INFO, WARN, ERROR, FATAL, nameFromLevel } from '@browser-bunyan/levels';
 const DEFAULT_CSS = {
     levels : {
         trace : 'color: DeepPink',

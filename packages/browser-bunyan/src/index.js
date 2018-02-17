@@ -13,7 +13,7 @@ export {
     resolveLevel,
     levelFromName,
     nameFromLevel,
-} from './levels';
+} from '@browser-bunyan/levels';
 
 export {
     stdSerializers,
@@ -29,5 +29,5 @@ export {
 } from './util';
 
 //streams
-export { ConsoleFormattedStream } from './console-formatted-stream';
-export { ConsoleRawStream } from './console-raw-stream';
+export { ConsoleFormattedStream } from '@browser-bunyan/console-formatted-stream';
+export { ConsoleRawStream } from '@browser-bunyan/console-raw-stream';

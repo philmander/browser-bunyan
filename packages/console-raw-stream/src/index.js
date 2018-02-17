@@ -1,4 +1,4 @@
-import { INFO, WARN, ERROR } from './levels';
+import { INFO, WARN, ERROR } from '@browser-bunyan/levels';
 
 export class ConsoleRawStream {
     write(rec) {

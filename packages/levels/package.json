@@ -1,0 +1,26 @@
+{
+  "name": "@browser-bunyan/levels",
+  "version": "1.3.1-pre.0",
+  "description": "Utils for working with log levels in Browser Bunyan",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./lib/index.js",
+  "module": "./lib/index.m.js",
+  "scripts": {
+    "lint": "../../node_modules/.bin/eslint src",
+    "prepublish": "npm run lint && npm test && npm run build",
+    "build": "../../node_modules/.bin/microbundle --name bunyanLevels",
+    "test": "exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/philmander/browser-bunyan.git"
+  },
+  "author": "Phil Mander",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/philmander/browser-bunyan/issues"
+  },
+  "homepage": "https://github.com/philmander/browser-bunyan#readme"
+}

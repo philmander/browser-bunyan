@@ -7,7 +7,7 @@ This package is an adaptation of, the Node logging library, [Bunyan](https://git
 
 Although Bunyan does support being [Browserified](https://github.com/trentm/node-bunyan#browserify), it is still a bit bloated with
 features which aren't relevant in a browser environment.  You can expect a Browserified and Gzipped `node-bunyan` to
-be around **27kb** whereas `browser-bunyan` is < **4kb**, including its built-in log streams. With ES Modules and
+be around **27kb** whereas `browser-bunyan` is **3.5kb**, including its built-in log streams. With ES Modules and
 tree-shaking this can be reduced further.
 
 ## Current status
@@ -72,7 +72,8 @@ The core library also includes a dedicated browser console stream with nice form
 Use it like this:
 
 ```javascript
-import { createLogger, ConsoleFormattedStream, INFO, stdSerializers } from 'browser-bunyan';
+import { createLogger, INFO, stdSerializers } from 'browser-bunyan';
+import { ConsoleFormattedStream } from '@browser-bunyan/console-formatted-stream';
 
 const log = createLogger({
     name: 'myLogger',
@@ -83,7 +84,7 @@ const log = createLogger({
         }
     ],
     serializers: stdSerializers,
-    src: true
+    src: true,
 });
 
 log.info('hi on info');
@@ -98,7 +99,7 @@ new ConsoleFormattedStream( { logByLevel: true } );
 
 The colors/css used by `ConsoleFormattedStream` are customizable:
 
-```
+```javascript
 new ConsoleFormattedStream({
     css: {
         levels : {
@@ -118,7 +119,7 @@ new ConsoleFormattedStream({
 
 or
 
-```
+```javascript
 const css = ConsoleFormattedStream.getDefaultCss();
 css.msg = 'color: cyan';
 new ConsoleFormattedStream({ css });
@@ -129,16 +130,72 @@ new ConsoleFormattedStream({ css });
 This logs the raw log record objects directly to the console.
 
 ```javascript
-import { createLogger, ConsoleRawStream, INFO } from 'browser-bunyan';
+import { createLogger, INFO } from 'browser-bunyan';
+import { ConsoleRawStream } from '@browser-bunyan/console-raw-stream';
 
 const log = createLogger({
     name: 'myLogger',
     stream: {
         level: INFO,
-        stream: new ConsoleRawStream()
+        stream: new ConsoleRawStream(),
     }
 });
 ```
+
+#### Server Stream
+
+The Server Stream sends log records to a server endpoint. You will typically want
+to set the log level for server streams to `warn`, `error` or `fatal` - log records
+that are for exceptions.
+
+```javascript
+import { createLogger, , WARN } from 'browser-bunyan';
+import { ServerStream } from '@browser-bunyan/server-stream';
+
+
+const log = createLogger({
+    name: 'serverLogger',
+    stream: {
+        level: WARN,
+        stream: new ServerStream({
+            url: '/client-log',
+            method: 'PUT',
+        }),
+    },
+});
+```
+
+##### Notes
+
+* The browser's current url and user agent string will automatically be appended to the
+log record.
+* Log records are sent to the server in JSON batches (an array of record objects) at a defined `throttleInterval`.
+* If, within a batch, a log message is duplicated, that log record will be deduped and a `count` field is incremented for the single log record
+* A `writeCondition` function determines if the latest batch of records should
+be sent. By default, log records will not be sent if the browser is offline
+(`navigator.onLine === false`) or the current user agent is determined to be a bot/crawler. You may
+add your own write conditions in addition to the default conditions like so:
+
+  ```javascript
+  new ServerLogStream({
+     url: '/client-log',
+     method: 'PUT',
+     writeCondition: record => {
+        return ServerLogStream.defaultWriteCondition() && record.msg !== 'GrikkleGrass';
+     },
+  })
+  ```
+
+##### Options
+
+| Option              | Default    | Description |
+| ------------------- |----------- | ------------------------------------------------- |
+| `url`               | /log       | Endpoint to send log record batches to (as JSON) |
+| `method`            | PUT        | HTTP method to send record payload with |
+| `withCredentials`   | `false`    | `withCredentials` property of the underlying `XMLHttpRequest` object |
+| `throttleInterval`  | 3000       | How often to send log record batches (ms) |
+| `writeCondition`    | `ServerLogStream.defaultWriteCondition` | A function which must return a boolean. `true` if the log record can be written. i.e. included in the next batch to send. |
+| `onError`           | -          | A handler function to invoke if the send request fails |
 
 #### Custom log streams
 
@@ -304,7 +361,7 @@ field:
     var wuzzle = new Wuzzle({log: log});
     wuzzle.woos();
     log.info('done');
-```    
+```
 
 Running that looks like (raw):
 
