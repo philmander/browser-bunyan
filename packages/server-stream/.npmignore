@@ -1,0 +1,11 @@
+tmp
+node_modules
+*.log
+/examples
+/*.tgz
+.idea
+
+.travis.yml
+.eslintrc.js
+src
+test

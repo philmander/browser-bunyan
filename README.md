@@ -72,7 +72,8 @@ The core library also includes a dedicated browser console stream with nice form
 Use it like this:
 
 ```javascript
-import { createLogger, ConsoleFormattedStream, INFO, stdSerializers } from 'browser-bunyan';
+import { createLogger, INFO, stdSerializers } from 'browser-bunyan';
+import { ConsoleFormattedStream } from '@browser-bunyan/console-formatted-stream';
 
 const log = createLogger({
     name: 'myLogger',
@@ -129,7 +130,8 @@ new ConsoleFormattedStream({ css });
 This logs the raw log record objects directly to the console.
 
 ```javascript
-import { createLogger, ConsoleRawStream, INFO } from 'browser-bunyan';
+import { createLogger, INFO } from 'browser-bunyan';
+import { ConsoleRawStream } from '@browser-bunyan/console-raw-stream';
 
 const log = createLogger({
     name: 'myLogger',
@@ -147,13 +149,15 @@ to set the log level for server streams to `warn`, `error` or `fatal` - log reco
 that are for exceptions.
 
 ```javascript
-import { createLogger, ServerLogStream, WARN } from 'browser-bunyan';
+import { createLogger, , WARN } from 'browser-bunyan';
+import { ServerStream } from '@browser-bunyan/server-stream';
+
 
 const log = createLogger({
     name: 'serverLogger',
     stream: {
         level: WARN,
-        stream: new ServerLogStream({
+        stream: new ServerStream({
             url: '/client-log',
             method: 'PUT',
         }),

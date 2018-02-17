@@ -1,13 +1,11 @@
-/tmp
-/node_modules
+tmp
+node_modules
 *.log
 /examples
-/test
 /*.tgz
-/tools
 .idea
 
-rollup.config.js
 .travis.yml
 .eslintrc.js
 src
+test

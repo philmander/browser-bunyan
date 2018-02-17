@@ -19,7 +19,7 @@
   "scripts": {
     "lint": "../../node_modules/.bin/eslint src",
     "prepublish": "npm run lint && npm test && npm run build",
-    "build": "../../node_modules/.bin/microbundle --name bunyan && mkdir dist && cp lib/index.umd.js dist/browser-bunyan.min.js",
+    "build": "../../node_modules/.bin/microbundle --name bunyan && ../../node_modules/.bin/mkdirp dist && cp lib/index.umd.js dist/browser-bunyan.min.js",
     "test": "../../node_modules/.bin/babel-tap test/*.test.js"
   },
   "dependencies": {

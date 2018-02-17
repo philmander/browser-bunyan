@@ -13,11 +13,11 @@ global.window = {
     }
 };
 
-import { Logger } from '../../src/index';
+import { Logger } from '../../browser-bunyan/src/index';
 
 import { test } from "babel-tap";
 
-import { ServerLogStream } from '../../src';
+import { ServerStream } from '../src';
 
 const MockXMLHttpRequest = require('mock-xmlhttprequest');
 global.XMLHttpRequest = MockXMLHttpRequest;
@@ -52,7 +52,7 @@ test('default behavior', function (t) {
     const log = new Logger({
         name: 'server-stream-test',
         streams: [{
-            stream: new ServerLogStream({ throttleInterval: 500 }),
+            stream: new ServerStream({ throttleInterval: 500 }),
         }],
     });
     log.info('one');
@@ -82,7 +82,7 @@ test('customize behavior', function (t) {
     const log = new Logger({
         name: 'server-stream-test',
         streams: [{
-            stream: new ServerLogStream({
+            stream: new ServerStream({
                 throttleInterval: 10,
                 method: 'POST',
                 url: '/things',
@@ -103,7 +103,7 @@ test('does not attempt to log offline', function (t) {
         reqSent = true;
     };
 
-    const stream = new ServerLogStream({
+    const stream = new ServerStream({
         throttleInterval: 100
     });
 
@@ -128,7 +128,7 @@ test('custom xhr error handler', function (t) {
     const log = new Logger({
         name: 'server-stream-test',
         streams: [{
-            stream: new ServerLogStream({
+            stream: new ServerStream({
                 throttleInterval: 100,
                 onError: function(records, xhr) {
                     t.equal(xhr.url, '/log');

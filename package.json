@@ -25,6 +25,7 @@
     "eslint": "^4.5.0",
     "lerna": "^2.9.0",
     "microbundle": "^0.2.4",
+    "mkdirp": "^0.5.1",
     "mock-xmlhttprequest": "^1.1.0"
   },
   "licenses": [

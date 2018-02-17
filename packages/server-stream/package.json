@@ -11,7 +11,7 @@
     "lint": "../../node_modules/.bin/eslint src",
     "prepublish": "npm run lint && npm test && npm run build",
     "build": "../../node_modules/.bin/microbundle --name serverStream",
-    "test": "exit 0"
+    "test": "../../node_modules/.bin/babel-tap test/*.test.js"
   },
   "repository": {
     "type": "git",
