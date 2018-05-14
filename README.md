@@ -149,7 +149,7 @@ to set the log level for server streams to `warn`, `error` or `fatal` - log reco
 that are for exceptions.
 
 ```javascript
-import { createLogger, , WARN } from 'browser-bunyan';
+import { createLogger, WARN } from 'browser-bunyan';
 import { ServerStream } from '@browser-bunyan/server-stream';
 
 
