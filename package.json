@@ -15,7 +15,8 @@
     "bunyan"
   ],
   "scripts": {
-    "bootstrap": "lerna bootstrap"
+    "bootstrap": "lerna bootstrap",
+    "release" : "lerna publish"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",

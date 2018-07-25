@@ -3,6 +3,7 @@ browser-bunyan
 
 [![Build Status](https://travis-ci.org/philmander/browser-bunyan.svg?branch=master)](https://travis-ci.org/philmander/browser-bunyan)
 
+
 This package is an adaptation of, the Node logging library, [Bunyan](https://github.com/trentm/node-bunyan) but specifically for the browser.
 
 Although Bunyan does support being [Browserified](https://github.com/trentm/node-bunyan#browserify), it is still a bit bloated with
@@ -47,7 +48,7 @@ logger.debug('hi on debug');
 To use as a **global**, include as a standard script tag:
 
 ```html
-<script src="//unpkg.com/browser-bunyan@1.2.2/dist/browser-bunyan.min.js"></script>
+<script src="https://unpkg.com/browser-bunyan@1.4.0/lib/index.umd.js"></script>
 ```
 
 now `bunyan` will be available as a global.
@@ -59,15 +60,15 @@ logger.warn('hi on warning');
 
 ### Built-in Log Streams
 
-Bunyan uses "log streams" to customize how each log record is processed. You can write your own to do
-whatever you want or use the built-in log streams which output log records to the console:
+Bunyan uses "log streams" to customize how each log record is processed. 
+You can write your own to do whatever you want or use the built-in log streams 
+which output log records to the console:
 
-#### Formatted Log Stream
+#### Console Formatted Stream
 
 The core library also includes a dedicated browser console stream with nice formatting:
 
 <img src="https://versatile.nl/images/browser-bunyan.png">
-
 
 Use it like this:
 
@@ -91,7 +92,7 @@ log.info('hi on info');
 ```
 
 By default this will use `console.log` for all logging. Pass the option `logByLevel` to the
-`ConsoleFormattedStream` to use the Console API's level specific logging methods (`console.info`, `console.warn`, etc). E.g.
+`ConsoleFormattedStream` constructor to use the Console API's level specific logging methods (`console.info`, `console.warn`, etc). E.g.
 
 ```javascript
 new ConsoleFormattedStream( { logByLevel: true } );
@@ -142,11 +143,54 @@ const log = createLogger({
 });
 ```
 
+#### Console Plain Stream
+
+This stream is similar to `ConsoleFormattedStream` but does not have colors. This
+is useful for environments where the console does not support
+ [console styling with CSS (`%c`)](https://developers.google.com/web/tools/chrome-devtools/console/console-write#styling_console_output_with_css).
+
+```javascript
+import { createLogger, INFO } from 'browser-bunyan';
+import { ConsolePlainStream } from '@browser-bunyan/console-plain-stream';
+
+const log = createLogger({
+    name: 'myLogger',
+    stream: {
+        level: INFO,
+        stream: new ConsolePlainStream()
+    }
+});
+```
+
+By default this will use `console.log` for all logging. Pass the option `logByLevel` to the
+`ConsolePlainStream` constructor to use the Console API's level specific logging methods (`console.info`, `console.warn`, etc). E.g.
+
+```javascript
+new ConsolePlainStream( { logByLevel: true } );
+```
+
+### Additional log streams
+
+These streams are not built in to the main Browser Bunyan build. You must install them
+separately.
+
 #### Server Stream
 
 The Server Stream sends log records to a server endpoint. You will typically want
 to set the log level for server streams to `warn`, `error` or `fatal` - log records
 that are for exceptions.
+
+##### Install
+
+`npm install @browser-bunyan/server-stream`
+
+To use as a gloabl include the script tag:
+
+```html
+<script src="https://unpkg.com/@browser-bunyan/server-stream@1.4.0/lib/index.umd.js"></script>
+```
+
+##### Usage
 
 ```javascript
 import { createLogger, WARN } from 'browser-bunyan';
@@ -173,8 +217,7 @@ log record.
 * If, within a batch, a log message is duplicated, that log record will be deduped and a `count` field is incremented for the single log record
 * A `writeCondition` function determines if the latest batch of records should
 be sent. By default, log records will not be sent if the browser is offline
-(`navigator.onLine === false`) or the current user agent is determined to be a bot/crawler. You may
-add your own write conditions in addition to the default conditions like so:
+(`navigator.onLine === false`) or the current user agent is determined to be a bot/crawler. You may add your own write conditions in addition to the default conditions like so:
 
   ```javascript
   new ServerLogStream({
@@ -197,7 +240,7 @@ add your own write conditions in addition to the default conditions like so:
 | `writeCondition`    | `ServerLogStream.defaultWriteCondition` | A function which must return a boolean. `true` if the log record can be written. i.e. included in the next batch to send. |
 | `onError`           | -          | A handler function to invoke if the send request fails |
 
-#### Custom log streams
+### Custom log streams
 
 See the Node Bunyan docs below for more information on how to create you own custom stream(s). 
 
