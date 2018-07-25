@@ -31,3 +31,4 @@ export {
 //streams
 export { ConsoleFormattedStream } from '@browser-bunyan/console-formatted-stream';
 export { ConsoleRawStream } from '@browser-bunyan/console-raw-stream';
+export { ConsolePlainStream } from '@browser-bunyan/console-plain-stream';
