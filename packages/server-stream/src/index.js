@@ -5,29 +5,44 @@ export class ServerStream {
 
     constructor(opts = {}) {
         const {
-            writeCondition = ServerStream.defaultWriteCondition,
-        } = opts;
-
-        this.opts = opts;
-        this.writeCondition = writeCondition;
-        this.records = {};
-
-        this.start();
-    }
-
-    start() {
-        const {
             method = 'PUT',
             url = '/log',
             throttleInterval = 3000,
             withCredentials = false,
             onError,
-        } = this.opts;
+            flushOnClose = false,
+            writeCondition = ServerStream.defaultWriteCondition,
+        } = opts;
 
+        this.writeCondition = writeCondition;
+        this.records = {};
+
+        this.start({ method, url, throttleInterval, withCredentials, onError });
+
+        // send outstanding records on unload
+        // this has some restrictions: browser must support `sendBeacon` and the 
+        // method option must be a "POST"
+        const sendBeaconSupported = 
+            typeof Blob !== undefined && window.navigator.sendBeacon;
+        if(flushOnClose && sendBeaconSupported && method.toLowerCase() === 'POST') {
+            window.addEventListener('unload', () => {
+                if(this.currentThrottleTimeout) {
+                    window.clearTimeout(this.currentThrottleTimeout);
+                }
+                const recs = this.recordsAsArray();
+                if(recs.length) {
+                    const blob = new Blob([JSON.stringify(recs)], { type : 'text/plain' });
+                    navigator.sendBeacon(url, blob);
+                }
+            }, false);
+        }
+    }
+
+    start({ method, url, throttleInterval, withCredentials, onError }) {
         const throttleRequests = () => {
             // wait for any errors to accumulate
             this.currentThrottleTimeout = setTimeout(() => {
-                const recs = Object.keys(this.records).map(errKey => this.records[errKey]);
+                const recs = this.recordsAsArray();
                 if(recs.length) {
                     const xhr = new XMLHttpRequest();
                     xhr.onreadystatechange = () => {
@@ -76,6 +91,10 @@ export class ServerStream {
                 this.records[rec.msg] = rec;
             }
         }
+    }
+
+    recordsAsArray() {
+        return Object.keys(this.records).map(errKey => this.records[errKey]);
     }
 
     static defaultWriteCondition() {
