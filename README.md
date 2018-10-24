@@ -91,13 +91,20 @@ const log = createLogger({
 
 log.info('hi on info');
 ```
+<a id=logByLevel></a>
+##### logByLevel
 
-By default this will use `console.log` for all logging. Pass the option `logByLevel` to the
-`ConsoleFormattedStream` constructor to use the Console API's level specific logging methods (`console.info`, `console.warn`, etc). E.g.
+By default this stream will use `console.log` for all logging. Pass the option `logByLevel` to the
+`ConsoleFormattedStream` constructor to use the Console API's level specific logging methods ([`console.error`](https://developers.google.com/web/tools/chrome-devtools/console/console-reference#error), [`console.warn`](https://developers.google.com/web/tools/chrome-devtools/console/console-reference#warn), [`console.info`](https://developers.google.com/web/tools/chrome-devtools/console/console-reference#consoleinfoobject_object) and [`console.debug`](https://developers.google.com/web/tools/chrome-devtools/console/console-reference#consoledebugobject_object)). E.g.
 
 ```javascript
 new ConsoleFormattedStream( { logByLevel: true } );
 ```
+
+Please note that if you use this option your browser's console may also filter
+out log output based on level, in addition to the Bunyan stream's log level.
+
+##### Colors
 
 The colors/css used by `ConsoleFormattedStream` are customizable:
 
@@ -163,12 +170,9 @@ const log = createLogger({
 });
 ```
 
-By default this will use `console.log` for all logging. Pass the option `logByLevel` to the
-`ConsolePlainStream` constructor to use the Console API's level specific logging methods (`console.info`, `console.warn`, etc). E.g.
+##### logByLevel
 
-```javascript
-new ConsolePlainStream( { logByLevel: true } );
-```
+The `logByLevel` option is supported in the same way as [`ConsoleFormattedStream`](#logByLevel).
 
 ### Additional log streams
 
