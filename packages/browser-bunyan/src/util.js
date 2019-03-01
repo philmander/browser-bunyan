@@ -80,7 +80,11 @@ export function format(f) {
         }
     });
     for (let x = args[i]; i < len; x = args[++i]) {
-        str += ' ' + x;
+        if (x === null || typeof (x) !== 'object') {
+            str += ' ' + x;
+        } else {
+            str += ' ' + inspect(x);
+        }
     }
     return str;
 }
