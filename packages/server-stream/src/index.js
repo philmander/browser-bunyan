@@ -24,7 +24,7 @@ export class ServerStream {
         // method option must be a "POST"
         const sendBeaconSupported = 
             typeof Blob !== undefined && window.navigator.sendBeacon;
-        if(flushOnClose && sendBeaconSupported && method.toLowerCase() === 'POST') {
+        if(flushOnClose && sendBeaconSupported && method.toUpperCase() === 'POST') {
             window.addEventListener('unload', () => {
                 if(this.currentThrottleTimeout) {
                     window.clearTimeout(this.currentThrottleTimeout);
