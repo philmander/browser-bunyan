@@ -1,6 +1,6 @@
 {
   "name": "@browser-bunyan/server-stream",
-  "version": "1.3.0",
+  "version": "1.5.1",
   "description": "Bunyan stream for batching and sending log records to a server",
   "publishConfig": {
     "access": "public"

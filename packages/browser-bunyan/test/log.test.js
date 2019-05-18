@@ -241,3 +241,14 @@ test('log.info(<err>)', function (t) {
     });
     t.end();
 });
+
+test('log.info(<str>, <obj>)', function (t) {
+    var obj = { hello: 'world' };
+    names.forEach(function (lvl) {
+        log3[lvl].call(log3, 'some messsage', obj);
+        var rec = catcher.records[catcher.records.length - 1];
+        t.equal(rec.msg, 'some messsage {"hello":"world"}',
+            format('log.%s msg: got %j', lvl, rec.msg));
+    });
+    t.end();
+});

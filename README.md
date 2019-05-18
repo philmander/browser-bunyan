@@ -2,6 +2,7 @@ browser-bunyan
 ===========
 
 [![Build Status](https://travis-ci.org/philmander/browser-bunyan.svg?branch=master)](https://travis-ci.org/philmander/browser-bunyan)
+[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
 
 
 This package is an adaptation of, the Node logging library, [Bunyan](https://github.com/trentm/node-bunyan) but specifically for the browser.
@@ -90,13 +91,20 @@ const log = createLogger({
 
 log.info('hi on info');
 ```
+<a id=logByLevel></a>
+##### logByLevel
 
-By default this will use `console.log` for all logging. Pass the option `logByLevel` to the
-`ConsoleFormattedStream` constructor to use the Console API's level specific logging methods (`console.info`, `console.warn`, etc). E.g.
+By default this stream will use `console.log` for all logging. Pass the option `logByLevel` to the
+`ConsoleFormattedStream` constructor to use the Console API's level specific logging methods ([`console.error`](https://developers.google.com/web/tools/chrome-devtools/console/console-reference#error), [`console.warn`](https://developers.google.com/web/tools/chrome-devtools/console/console-reference#warn), [`console.info`](https://developers.google.com/web/tools/chrome-devtools/console/console-reference#consoleinfoobject_object) and [`console.debug`](https://developers.google.com/web/tools/chrome-devtools/console/console-reference#consoledebugobject_object)). E.g.
 
 ```javascript
 new ConsoleFormattedStream( { logByLevel: true } );
 ```
+
+Please note that if you use this option your browser's console may also filter
+out log output based on level, in addition to the Bunyan stream's log level.
+
+##### Colors
 
 The colors/css used by `ConsoleFormattedStream` are customizable:
 
@@ -162,12 +170,9 @@ const log = createLogger({
 });
 ```
 
-By default this will use `console.log` for all logging. Pass the option `logByLevel` to the
-`ConsolePlainStream` constructor to use the Console API's level specific logging methods (`console.info`, `console.warn`, etc). E.g.
+##### logByLevel
 
-```javascript
-new ConsolePlainStream( { logByLevel: true } );
-```
+The `logByLevel` option is supported in the same way as [`ConsoleFormattedStream`](#logByLevel).
 
 ### Additional log streams
 
@@ -215,6 +220,11 @@ const log = createLogger({
 log record.
 * Log records are sent to the server in JSON batches (an array of record objects) at a defined `throttleInterval`.
 * If, within a batch, a log message is duplicated, that log record will be deduped and a `count` field is incremented for the single log record
+* The `flushOnClose` option will flush any unsent log records if the browser window/tab is closed.
+Internally this uses [`Navigator.sendBeacon()`](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/sendBeacon) which has [some caveats](https://bugs.chromium.org/p/chromium/issues/detail?id=490015) you should be aware of before enabling it:
+  * It will only work if the `method` option is set to `"POST"`
+  * The payload must currently be sent as `text/plain` so the server endpoint must be configured
+to parse plain text json payloads.
 * A `writeCondition` function determines if the latest batch of records should
 be sent. By default, log records will not be sent if the browser is offline
 (`navigator.onLine === false`) or the current user agent is determined to be a bot/crawler. You may add your own write conditions in addition to the default conditions like so:
@@ -222,7 +232,7 @@ be sent. By default, log records will not be sent if the browser is offline
   ```javascript
   new ServerLogStream({
      url: '/client-log',
-     method: 'PUT',
+     method: 'POST',
      writeCondition: record => {
         return ServerLogStream.defaultWriteCondition() && record.msg !== 'GrikkleGrass';
      },
@@ -239,6 +249,8 @@ be sent. By default, log records will not be sent if the browser is offline
 | `throttleInterval`  | 3000       | How often to send log record batches (ms) |
 | `writeCondition`    | `ServerLogStream.defaultWriteCondition` | A function which must return a boolean. `true` if the log record can be written. i.e. included in the next batch to send. |
 | `onError`           | -          | A handler function to invoke if the send request fails |
+| `flushOnClose`      | `false`    | **Experimental** Send unsent log records if the browser window is closed |
+
 
 ### Custom log streams
 
