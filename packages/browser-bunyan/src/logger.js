@@ -484,7 +484,8 @@ function mkLogEmitter(minLevel) {
                     //need to throw the error so there is a stack in IE
                     throw new Error(CALL_STACK_ERROR);
                 } catch (err) {
-                    const src = extractSrcFromStacktrace(err.stack, 2);
+                    // in Safari there is missing stack trace sometimes
+                    const src = err.stack ? extractSrcFromStacktrace(err.stack, 2) : '';
                     if (!src && !_haveWarned('src')) {
                         _warn('Unable to determine src line info', 'src');
                     }
