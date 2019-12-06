@@ -115,7 +115,7 @@ new ConsoleFormattedStream({
             trace: 'color: DeepPink',
             debug: 'color: GoldenRod',
             info: 'color: DarkTurquoise',
-            warm: 'color: Purple',
+            warn: 'color: Purple',
             error: 'color: Crimson',
             fatal: 'color: Black',
         },
