@@ -69,7 +69,7 @@ which output log records to the console:
 
 The core library also includes a dedicated browser console stream with nice formatting:
 
-<img src="https://versatile.nl/images/browser-bunyan.png">
+<img src="examples/browser-bunyan.png">
 
 Use it like this:
 
@@ -423,7 +423,7 @@ Running that looks like (raw):
 {"name":"myapp","level":30,"msg":"done","time":"2013-01-04T07:47:25.816Z"}
 ```
 
-For streams such as *Console Formatted Stream* and *Console Plain Stream*, adding the field `childName` will display a child 
+For streams such as *Console Formatted Stream* and *Console Plain Stream*, adding the field `childName` will display a child
 stream's name suffixed to the parent logger name. For example:
 
 ```javascript
