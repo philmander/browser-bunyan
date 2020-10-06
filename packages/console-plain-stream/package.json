@@ -1,6 +1,6 @@
 {
   "name": "@browser-bunyan/console-plain-stream",
-  "version": "1.5.4",
+  "version": "1.6.0",
   "description": "Bunyan stream for outputting plain text records to the browser console",
   "publishConfig": {
     "access": "public"
@@ -27,7 +27,7 @@
     "plain"
   ],
   "dependencies": {
-    "@browser-bunyan/levels": "^1.5.4"
+    "@browser-bunyan/levels": "^1.6.0"
   },
   "author": "Phil Mander",
   "license": "MIT",
