@@ -1,0 +1,16 @@
+{
+  "name": "@browser-bunyan/browser-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server | bunyan",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "bunyan-sfdx-no-dtrace": "^1.8.2",
+    "express": "^4.17.1"
+  }
+}

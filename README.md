@@ -61,8 +61,8 @@ logger.warn('hi on warning');
 
 ### Built-in Log Streams
 
-Bunyan uses "log streams" to customize how each log record is processed. 
-You can write your own to do whatever you want or use the built-in log streams 
+Bunyan uses "log streams" to customize how each log record is processed.
+You can write your own to do whatever you want or use the built-in log streams
 which output log records to the console:
 
 #### Console Formatted Stream
@@ -189,7 +189,7 @@ that are for exceptions.
 
 `npm install @browser-bunyan/server-stream`
 
-To use as a gloabl include the script tag:
+To use as a global include the script tag:
 
 ```html
 <script src="https://unpkg.com/@browser-bunyan/server-stream@1.4.0/lib/index.umd.js"></script>
@@ -220,11 +220,7 @@ const log = createLogger({
 log record.
 * Log records are sent to the server in JSON batches (an array of record objects) at a defined `throttleInterval`.
 * If, within a batch, a log message is duplicated, that log record will be deduped and a `count` field is incremented for the single log record
-* The `flushOnClose` option will flush any unsent log records if the browser window/tab is closed.
-Internally this uses [`Navigator.sendBeacon()`](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/sendBeacon) which has [some caveats](https://bugs.chromium.org/p/chromium/issues/detail?id=490015) you should be aware of before enabling it:
-  * It will only work if the `method` option is set to `"POST"`
-  * The payload must currently be sent as `text/plain` so the server endpoint must be configured
-to parse plain text json payloads.
+* The `flushOnClose` option will flush any unsent log records if the browser window/tab is closed. Internally this requires Fetch API to be supported.
 * A `writeCondition` function determines if the latest batch of records should
 be sent. By default, log records will not be sent if the browser is offline
 (`navigator.onLine === false`) or the current user agent is determined to be a bot/crawler. You may add your own write conditions in addition to the default conditions like so:
@@ -254,9 +250,9 @@ be sent. By default, log records will not be sent if the browser is offline
 
 ### Custom log streams
 
-See the Node Bunyan docs below for more information on how to create you own custom stream(s). 
+See the Node Bunyan docs below for more information on how to create you own custom stream(s).
 
-This [gist for a "server-stream"](https://gist.github.com/philmander/7788b680acb776bab4ae67df63db227a) is also good example of how to write a log stream that sends log records to the server. 
+This [gist for a "server-stream"](https://gist.github.com/philmander/7788b680acb776bab4ae67df63db227a) is also good example of how to write a log stream that sends log records to the server.
 
 ## Browser specific features
 

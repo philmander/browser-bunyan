@@ -19,20 +19,27 @@ export class ServerStream {
 
         this.start({ method, url, throttleInterval, withCredentials, onError });
 
-        // send outstanding records on unload
-        // this has some restrictions: browser must support `sendBeacon` and the 
-        // method option must be a "POST"
-        const sendBeaconSupported = 
-            typeof Blob !== undefined && window.navigator.sendBeacon;
-        if(flushOnClose && sendBeaconSupported && method.toUpperCase() === 'POST') {
-            window.addEventListener('unload', () => {
-                if(this.currentThrottleTimeout) {
+        if (flushOnClose && typeof window.fetch !== 'undefined') {
+            // TODO: look at page visibility api here
+            // https://github.com/GoogleChromeLabs/page-lifecycle
+            window.addEventListener('beforeunload', () => {
+                if (this.currentThrottleTimeout) {
                     window.clearTimeout(this.currentThrottleTimeout);
                 }
                 const recs = this.recordsAsArray();
-                if(recs.length) {
-                    const blob = new Blob([JSON.stringify(recs)], { type : 'text/plain' });
-                    navigator.sendBeacon(url, blob);
+                if (recs.length) {
+                    // swapped sendBeacon for fetch as discussed here:
+                    // https://stackoverflow.com/questions/55421459/http-request-beforeunload-sendbeacon-vs-img-src
+                    window.fetch(url, {
+                        method,
+                        body: JSON.stringify(recs),
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        credentials: withCredentials ? 'include' : 'same-origin',
+                        mode: 'cors',
+                        keepalive: true,
+                    });
                 }
             }, false);
         }
@@ -43,12 +50,12 @@ export class ServerStream {
             // wait for any errors to accumulate
             this.currentThrottleTimeout = setTimeout(() => {
                 const recs = this.recordsAsArray();
-                if(recs.length) {
+                if (recs.length) {
                     const xhr = new XMLHttpRequest();
                     xhr.onreadystatechange = () => {
-                        if(xhr.readyState === XMLHttpRequest.DONE) {
-                            if(xhr.status >= 400) {
-                                if(typeof onError === 'function') {
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            if (xhr.status >= 400) {
+                                if (typeof onError === 'function') {
                                     onError.call(this, recs, xhr);
                                 } else {
                                     console.warn('Browser Bunyan: A server log write failed');
@@ -73,7 +80,7 @@ export class ServerStream {
 
     stop() {
         setTimeout(() => {
-            if(this.currentThrottleTimeout) {
+            if (this.currentThrottleTimeout) {
                 clearTimeout(this.currentThrottleTimeout);
                 this.currentThrottleTimeout = null;
             }
@@ -83,8 +90,8 @@ export class ServerStream {
     write(rec) {
         rec.url = typeof window !== 'undefined' && window.location.href;
         rec.userAgent = userAgent;
-        if(this.currentThrottleTimeout && this.writeCondition(rec)) {
-            if(this.records[rec.msg]) {
+        if (this.currentThrottleTimeout && this.writeCondition(rec)) {
+            if (this.records[rec.msg]) {
                 this.records[rec.msg].count++;
             } else {
                 rec.count = 1;
