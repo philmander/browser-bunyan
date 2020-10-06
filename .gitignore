@@ -3,6 +3,7 @@
 !/test/corpus/*.log
 /*.tgz
 .idea
+.DS_Store
 
 dist
 lib
