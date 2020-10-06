@@ -1,16 +1,16 @@
 import { TRACE, DEBUG, INFO, WARN, ERROR, FATAL, nameFromLevel } from '@browser-bunyan/levels';
 const DEFAULT_CSS = {
-    levels : {
-        trace : 'color: DeepPink',
-        debug : 'color: GoldenRod',
-        info : 'color: DarkTurquoise',
-        warn : 'color: Purple',
-        error : 'color: Crimson',
-        fatal : 'color: Black',
+    levels: {
+        trace: 'color: DeepPink',
+        debug: 'color: GoldenRod',
+        info: 'color: DarkTurquoise',
+        warn: 'color: Purple',
+        error: 'color: Crimson',
+        fatal: 'color: Black',
     },
     def: 'color: DimGray',
-    msg : 'color: SteelBlue',
-    src : 'color: DimGray; font-style: italic; font-size: 0.9em',
+    msg: 'color: SteelBlue',
+    src: 'color: DimGray; font-style: italic; font-size: 0.9em',
 };
 
 export class ConsoleFormattedStream {
@@ -76,14 +76,15 @@ export class ConsoleFormattedStream {
             logArgs.push(srcCss);
             logArgs.push(rec.src);
         }
-
-        consoleMethod.apply(console, logArgs);
-        if (rec.err && rec.err.stack) {
-            consoleMethod.call(console, '%c%s,', levelCss, rec.err.stack);
-        }
         if (rec.obj) {
-            consoleMethod.call(console, rec.obj);
+            logArgs.push('\n');
+            logArgs.push(rec.obj);
         }
+        if (rec.err && rec.err.stack) {
+            logArgs.push('\n');
+            logArgs.push(rec.err.stack);
+        }
+        consoleMethod.apply(console, logArgs);
     }
 
     static getDefaultCss() {
