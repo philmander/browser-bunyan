@@ -1,16 +1,31 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset='utf-8'>
     <title>Browser Bunyan Examples</title>
-    <script src="../../packages/browser-bunyan/dist/browser-bunyan.min.js"></script>
+    <script src="/static/browser-bunyan/dist/browser-bunyan.min.js"></script>
+    <!-- <script src="https://unpkg.com/@browser-bunyan/server-stream@1.5.3/lib/index.umd.js"></script> -->
+    <script src="/static/server-stream/lib/index.umd.js"></script>
+
 </head>
+
 <body>
     <h1>Browser Bunyan examples</h1>
     <p>Look in your console to see this code run:</p>
-    <div style="font-family: Consolas, 'courier new', monospace; font-size: 12px"><pre id="codeHolder"></pre></div>
+    <div style="font-family: Consolas, 'courier new', monospace; font-size: 12px">
+        <p id="timer" style="text-align: right;"></p>
+        <pre id="codeHolder"></pre>
+    </div>
 
     <script id="code">
+
+        let time = 0;
+        let step = 1000;
+        window.setInterval(() => {
+            time += step;
+            document.getElementById('timer').textContent = time;
+        }, step);
 
         var rawLogger = bunyan.createLogger({
             name: 'raw',
@@ -19,12 +34,25 @@
                 {
                     level: 'trace',
                     stream: new bunyan.ConsoleRawStream(),
+                },
+                {
+                    level: 'warn',
+                    stream: new serverStream.ServerStream({
+                        method: 'POST',
+                        throttleInterval: 5000,
+                        flushOnClose: true,
+                    }),
                 }
             ]
         });
 
+        // test unload logs
+        window.setTimeout(() => {
+            rawLogger.error('Sent after 5000ms');
+        }, 6000);
+
         var err = new Error('Example Error');
-        var obj = { x: 1, y: { z: function() { return 'foo'}} };
+        var obj = { x: 1, y: { z: function () { return 'foo' } } };
 
         rawLogger.trace('This is a %s log using a %s stream', 'trace', 'raw');
         rawLogger.debug('This is a %s log using a %s stream', 'debug', 'raw');
@@ -33,7 +61,7 @@
         rawLogger.error('This is an %s log using a %s stream', 'error', 'raw');
         rawLogger.fatal('This is a %s log using a %s stream', 'fatal', 'raw');
         rawLogger.error(err, 'This is an %s log with an error object using a %s stream', 'error', 'raw');
-        rawLogger.fatal(err, 'This is a %s log with an error object using a %s stream', 'fatalgul', 'raw');
+        rawLogger.fatal(err, 'This is a %s log with an error object using a %s stream', 'fatal', 'raw');
         rawLogger.info({ obj: obj }, 'This is an %s log with an object using a %s stream', 'info', 'raw');
 
         var css = bunyan.ConsoleFormattedStream.getDefaultCss();
@@ -67,10 +95,11 @@
 
     </script>
     <script>
-        (function() {
+        (function () {
             var code = document.getElementById('code').innerHTML;
             document.getElementById('codeHolder').innerHTML = code;
         })();
     </script>
 </body>
+
 </html>
