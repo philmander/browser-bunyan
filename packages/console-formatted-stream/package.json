@@ -7,9 +7,11 @@
   },
   "main": "./lib/index.js",
   "module": "./lib/index.m.js",
+  "typings": "./lib/index.d.ts",
   "scripts": {
     "lint": "../../node_modules/.bin/eslint src",
-    "prepublish": "npm run lint && npm test && npm run build",
+    "prepublish": "npm run lint && npm test && npm run build && npm run copy-types",
+    "copy-types" : "cp src/index.d.ts lib/index.d.ts",
     "build": "../../node_modules/.bin/microbundle --name consoleFormattedStream",
     "test": "../../node_modules/.bin/babel-tap src/*.test.js"
   },

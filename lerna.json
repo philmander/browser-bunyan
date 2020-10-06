@@ -1,6 +1,7 @@
 {
   "packages": [
-    "packages/*"
+    "packages/*",
+    "examples/typescript"
   ],
   "version": "1.5.3"
 }

@@ -7,9 +7,11 @@
   },
   "main": "./lib/index.js",
   "module": "./lib/index.m.js",
+  "typings": "./lib/index.d.ts",
   "scripts": {
     "lint": "../../node_modules/.bin/eslint src",
-    "prepublish": "npm run lint && npm test && npm run build",
+    "prepublish": "npm run lint && npm test && npm run build && npm run copy-types",
+    "copy-types" : "cp src/index.d.ts lib/index.d.ts",
     "build": "../../node_modules/.bin/microbundle --name consolePlainStream",
     "test": "exit 0"
   },
@@ -32,5 +34,6 @@
   "bugs": {
     "url": "https://github.com/philmander/browser-bunyan/issues"
   },
-  "homepage": "https://github.com/philmander/browser-bunyan#readme"
+  "homepage": "https://github.com/philmander/browser-bunyan#readme",
+  "gitHead": "7c96ce9adf55b9f724ad1ff7d1016132af8b3d33"
 }
