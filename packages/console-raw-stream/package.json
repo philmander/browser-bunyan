@@ -1,6 +1,6 @@
 {
   "name": "@browser-bunyan/console-raw-stream",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "description": "Bunyan stream for outputting raw JSON records to the browser console",
   "publishConfig": {
     "access": "public"
@@ -11,7 +11,7 @@
   "scripts": {
     "lint": "../../node_modules/.bin/eslint src",
     "prepublish": "npm run lint && npm test && npm run build && npm run copy-types",
-    "copy-types" : "cp src/index.d.ts lib/index.d.ts",
+    "copy-types": "cp src/index.d.ts lib/index.d.ts",
     "build": "../../node_modules/.bin/microbundle --name consoleRawStream",
     "test": "exit 0"
   },
@@ -27,7 +27,7 @@
     "raw"
   ],
   "dependencies": {
-    "@browser-bunyan/levels": "^1.5.3"
+    "@browser-bunyan/levels": "^1.5.4"
   },
   "author": "Phil Mander",
   "license": "MIT",
