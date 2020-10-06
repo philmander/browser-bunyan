@@ -423,6 +423,15 @@ Running that looks like (raw):
 {"name":"myapp","level":30,"msg":"done","time":"2013-01-04T07:47:25.816Z"}
 ```
 
+For streams such as *Console Formatted Stream* and *Console Plain Stream*, adding the field `childName` will display a child 
+stream's name suffixed to the parent logger name. For example:
+
+```javascript
+    const log = createLogger({name: 'myapp'});
+    const childLog = log.child({widget_type: 'wuzzle', childName: 'sub'});
+    // prints "myapp/sub" as the name in console output
+```
+
 ### Serializers
 
 Bunyan has a concept of **"serializers" to produce a JSON-able object from a
