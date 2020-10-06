@@ -15,6 +15,7 @@
     "bunyan"
   ],
   "scripts": {
+    "clean": "lerna clean",
     "bootstrap": "lerna bootstrap",
     "test": "lerna run test",
     "release": "lerna publish"
