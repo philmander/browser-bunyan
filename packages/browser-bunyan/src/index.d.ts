@@ -19,43 +19,48 @@ interface Logger {
     addSerializers(): void,
     child(options?: LoggerOptions, simple?: boolean): Logger,
 
-    level(): number,
     level(level: string | number): void,
+    level(): number,
 
-    levels(): Array<number>,
-    levels(stream: string): number,
     levels(stream: string | number, level: string | number): void,
+    levels(stream: string): number,
+    levels(): Array<number>,
 
     // trace
-    trace(): boolean,
-    trace(msg: string, ...args: any[]): void,
-    trace(err: Error, msg: string, ...args: any[]): void,
     trace(fields: object, msg: string, ...args: any[]): void,
+    trace(err: Error, msg: string, ...args: any[]): void,
+    trace(msg: string, ...args: any[]): void,
+    trace(): boolean,
+
     // debug
-    debug(): boolean,
-    debug(msg: string, ...args: any[]): void,
-    debug(err: Error, msg: string, ...args: any[]): void,
     debug(fields: object, msg: string, ...args: any[]): void,
+    debug(err: Error, msg: string, ...args: any[]): void,
+    debug(msg: string, ...args: any[]): void,
+    debug(): boolean,
+
     // info
-    info(): boolean,
-    info(msg: string, ...args: any[]): void,
-    info(err: Error, msg: string, ...args: any[]): void,
     info(fields: object, msg: string, ...args: any[]): void,
+    info(err: Error, msg: string, ...args: any[]): void,
+    info(msg: string, ...args: any[]): void,
+    info(): boolean,
+
     // warn
-    warn(): boolean,
-    warn(msg: string, ...args: any[]): void,
-    warn(err: Error, msg: string, ...args: any[]): void,
     warn(fields: object, msg: string, ...args: any[]): void,
+    warn(err: Error, msg: string, ...args: any[]): void,
+    warn(msg: string, ...args: any[]): void,
+    warn(): boolean,
+
     // error
-    error(): boolean,
-    error(msg: string, ...args: any[]): void,
-    error(err: Error, msg: string, ...args: any[]): void,
     error(fields: object, msg: string, ...args: any[]): void,
+    error(err: Error, msg: string, ...args: any[]): void,
+    error(msg: string, ...args: any[]): void,
+    error(): boolean,
+
     // fatal
-    fatal(): boolean,
-    fatal(msg: string, ...args: any[]): void,
-    fatal(err: Error, msg: string, ...args: any[]): void,
     fatal(fields: object, msg: string, ...args: any[]): void,
+    fatal(err: Error, msg: string, ...args: any[]): void,
+    fatal(msg: string, ...args: any[]): void,
+    fatal(): boolean,
 }
 
 export type StdSerializers = {
