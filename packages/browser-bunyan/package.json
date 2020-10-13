@@ -1,6 +1,6 @@
 {
   "name": "browser-bunyan",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "description": "Bunyan logging specifically for the browser",
   "author": "Phil Mander <philip.mander@gmail.com>",
   "repository": {

@@ -1,6 +1,6 @@
 {
   "name": "@browser-bunyan/typescript-example",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "description": "Example use of Browser Bunyan from a Typescript project",
   "main": "index.js",
   "scripts": {
@@ -15,7 +15,7 @@
     "@browser-bunyan/console-raw-stream": "^1.6.0",
     "@browser-bunyan/levels": "^1.6.0",
     "@browser-bunyan/server-stream": "^1.6.1",
-    "browser-bunyan": "^1.6.2"
+    "browser-bunyan": "^1.6.3"
   },
   "devDependencies": {
     "ts-loader": "^8.0.4",
