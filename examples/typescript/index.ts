@@ -1,7 +1,12 @@
-import { createLogger, INFO, DEBUG, WARN, stdSerializers, resolveLevel } from 'browser-bunyan';
-import { ConsoleFormattedStream } from '@browser-bunyan/console-formatted-stream';
-import { ConsolePlainStream } from '@browser-bunyan/console-plain-stream';
-import { ConsoleRawStream } from '@browser-bunyan/console-raw-stream';
+import {
+    createLogger,
+    INFO, DEBUG, WARN,
+    stdSerializers,
+    resolveLevel,
+    ConsoleRawStream,
+    ConsoleFormattedStream,
+    ConsolePlainStream,
+} from 'browser-bunyan';
 
 const log = createLogger({
     name: 'myLogger',
