@@ -70,3 +70,8 @@ export type StdSerializers = {
 export * from '@browser-bunyan/levels';
 export function createLogger(opts: LoggerOptions): Logger;
 export const stdSerializers: StdSerializers;
+export function safeCycles(): any;
+
+export * from '@browser-bunyan/console-plain-stream';
+export * from '@browser-bunyan/console-raw-stream';
+export * from '@browser-bunyan/console-formatted-stream';
