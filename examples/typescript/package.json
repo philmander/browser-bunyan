@@ -3,10 +3,10 @@
   "version": "1.6.3",
   "description": "Example use of Browser Bunyan from a Typescript project",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "build": "webpack",
-    "start": "node ./dist/logger-demo",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./dist/logger-demo"
   },
   "author": "",
   "dependencies": {
