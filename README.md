@@ -309,6 +309,24 @@ All loggers must provide a "name". This is somewhat akin to the log4j logger
     {"name":"myapp","hostname":"banana.local","pid":40161,"level":40,"lang":"fr","msg":"au revoir","time":"2013-01-04T18:46:23.853Z","v":0}
 ```
 
+## Constructor API
+
+```javascript
+const { createLogger } = require('browser-bunyan');
+const log = createLogger({
+    name: <string>,                     // Required
+    level: <level constant or string>,  // Optional, see "Levels" section
+    stream: <LogStream>,                // Optional, see "Streams" section
+    streams: <StreamOptions[]>          // Optional, see "Streams" section
+    serializers: <serializers mapping>, // Optional, see "Serializers" section
+    src: <boolean>,                     // Optional, see "Core fields" section
+
+    // Any other fields are added to all log records as is.
+    foo: 'bar',
+    ...
+});
+```
+
 ### Log Method API
 
 The example above shows two different ways to call `log.info(...)`. The
