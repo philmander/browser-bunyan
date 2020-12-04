@@ -7,12 +7,17 @@ type LoggerOptions = {
     src?: boolean,
     stream?: LogStream,
     level?: string | number,
-    [key: string]: any;
+    [key: string]: any
 }
 
 type ChildLoggerOptions = {
-    childName?: string;
-    [key: string]: any;
+    childName?: string
+    streams?: Array<StreamOptions>,
+    serializers?: Object,
+    src?: boolean,
+    stream?: LogStream,
+    level?: string | number,
+    [key: string]: any
 }
 
 type StreamOptions = {
