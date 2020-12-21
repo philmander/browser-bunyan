@@ -17,7 +17,7 @@ type StreamOptions = {
 interface Logger {
     addStream(): void,
     addSerializers(): void,
-    child(options?: LoggerOptions, simple?: boolean): Logger,
+    child(options?: Omit<LoggerOptions, 'name'>, simple?: boolean): Logger,
 
     level(level: string | number): void,
     level(): number,
