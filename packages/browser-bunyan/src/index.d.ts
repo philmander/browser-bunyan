@@ -3,7 +3,7 @@ import { LogStream } from '@browser-bunyan/levels';
 type LoggerOptions = {
     name: string,
     streams?: Array<StreamOptions>,
-    serializers?: Object,
+    serializers?: Serializers,
     src?: boolean,
     stream?: LogStream,
     level?: string | number,
@@ -14,9 +14,11 @@ type StreamOptions = {
     stream: LogStream,
 }
 
+type Serializers = { [key: string]: Function };
+
 interface Logger {
-    addStream(): void,
-    addSerializers(): void,
+    addStream(stream: StreamOptions, defaultLevel?: number | string): void,
+    addSerializers(serializers?: Serializers): void,
     child(options?: LoggerOptions, simple?: boolean): Logger,
 
     level(level: string | number): void,
@@ -28,37 +30,37 @@ interface Logger {
 
     // trace
     trace(fields: object, msg: string, ...args: any[]): void,
-    trace(err: Error, msg: string, ...args: any[]): void,
+    trace(err: Error, msg?: string, ...args: any[]): void,
     trace(msg: string, ...args: any[]): void,
     trace(): boolean,
 
     // debug
     debug(fields: object, msg: string, ...args: any[]): void,
-    debug(err: Error, msg: string, ...args: any[]): void,
+    debug(err: Error, msg?: string, ...args: any[]): void,
     debug(msg: string, ...args: any[]): void,
     debug(): boolean,
 
     // info
     info(fields: object, msg: string, ...args: any[]): void,
-    info(err: Error, msg: string, ...args: any[]): void,
+    info(err: Error, msg?: string, ...args: any[]): void,
     info(msg: string, ...args: any[]): void,
     info(): boolean,
 
     // warn
     warn(fields: object, msg: string, ...args: any[]): void,
-    warn(err: Error, msg: string, ...args: any[]): void,
+    warn(err: Error, msg?: string, ...args: any[]): void,
     warn(msg: string, ...args: any[]): void,
     warn(): boolean,
 
     // error
     error(fields: object, msg: string, ...args: any[]): void,
-    error(err: Error, msg: string, ...args: any[]): void,
+    error(err: Error, msg?: string, ...args: any[]): void,
     error(msg: string, ...args: any[]): void,
     error(): boolean,
 
     // fatal
     fatal(fields: object, msg: string, ...args: any[]): void,
-    fatal(err: Error, msg: string, ...args: any[]): void,
+    fatal(err: Error, msg?: string, ...args: any[]): void,
     fatal(msg: string, ...args: any[]): void,
     fatal(): boolean,
 }
