@@ -413,15 +413,16 @@ class Logger {
             return str;
         }
 
+        const returnArray = [];
         const level = rec.level;
         for (i = 0; i < this.streams.length; i++) {
             const s = this.streams[i];
             if (s.level <= level) {
-                s.stream.write(rec);
+                returnArray.push(s.stream.write(rec));
             }
         }
 
-        return str;
+        return returnArray;
     }
 }
 
@@ -505,7 +506,7 @@ function mkLogEmitter(minLevel) {
             /* pass through */
         } else {
             rec = mkRecord(msgArgs);
-            this._emit(rec);
+            return this._emit(rec);
         }
     };
 }
