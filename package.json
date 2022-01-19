@@ -27,8 +27,8 @@
     "babel-tap": "^5.0.0",
     "eslint": "^4.5.0",
     "lerna": "^4.0.0",
-    "microbundle": "^0.2.4",
-    "mkdirp": "^0.5.1",
+    "microbundle": "^0.14.2",
+    "mkdirp": "^0.5.5",
     "mock-xmlhttprequest": "^1.1.0"
   },
   "licenses": [
