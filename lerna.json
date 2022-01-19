@@ -3,5 +3,5 @@
     "examples/typescript",
     "packages/*"
   ],
-  "version": "1.6.3"
+  "version": "1.6.4"
 }
