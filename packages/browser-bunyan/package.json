@@ -1,6 +1,6 @@
 {
   "name": "browser-bunyan",
-  "version": "1.6.3",
+  "version": "1.6.4",
   "description": "Bunyan logging specifically for the browser",
   "author": "Phil Mander <philip.mander@gmail.com>",
   "repository": {
@@ -21,11 +21,11 @@
     "lint": "../../node_modules/.bin/eslint src",
     "prepublish": "npm run lint && npm test && npm run build && npm run copy-types",
     "copy-types": "cp src/index.d.ts lib/index.d.ts",
-    "build": "../../node_modules/.bin/microbundle --name bunyan && ../../node_modules/.bin/mkdirp dist && cp lib/index.umd.js dist/browser-bunyan.min.js",
+    "build": "../../node_modules/.bin/microbundle --name bunyan --external none && ../../node_modules/.bin/mkdirp dist && cp lib/index.umd.js dist/browser-bunyan.min.js",
     "test": "../../node_modules/.bin/babel-tap test/*.test.js"
   },
   "dependencies": {
-    "@browser-bunyan/console-formatted-stream": "^1.6.2",
+    "@browser-bunyan/console-formatted-stream": "^1.6.4",
     "@browser-bunyan/console-plain-stream": "^1.6.0",
     "@browser-bunyan/console-raw-stream": "^1.6.0",
     "@browser-bunyan/levels": "^1.6.0"
@@ -35,10 +35,5 @@
       "type": "MIT",
       "url": "https://github.com/philmander/browser-bunyan/blob/master/LICENSE"
     }
-  ],
-  "babel": {
-    "presets": [
-      "env"
-    ]
-  }
+  ]
 }

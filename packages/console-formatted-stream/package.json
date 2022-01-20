@@ -1,6 +1,6 @@
 {
   "name": "@browser-bunyan/console-formatted-stream",
-  "version": "1.6.2",
+  "version": "1.6.4",
   "description": "Bunyan stream for outputting nicely formatted records to the browser console",
   "publishConfig": {
     "access": "public"
