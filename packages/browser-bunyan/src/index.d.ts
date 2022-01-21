@@ -1,6 +1,6 @@
 import { LogStream } from '@browser-bunyan/levels';
 
-type LoggerOptions = {
+export type LoggerOptions = {
     name: string,
     streams?: Array<StreamOptions>,
     serializers?: Serializers,
@@ -10,7 +10,7 @@ type LoggerOptions = {
     [key: string]: any
 }
 
-type ChildLoggerOptions = {
+export type ChildLoggerOptions = {
     childName?: string
     streams?: Array<StreamOptions>,
     serializers?: Object,
@@ -20,12 +20,12 @@ type ChildLoggerOptions = {
     [key: string]: any
 }
 
-type StreamOptions = {
+export type StreamOptions = {
     level?: string | number,
     stream: LogStream,
 }
 
-type Serializers = { [key: string]: Function };
+export type Serializers = { [key: string]: Function };
 
 export declare class Logger {
     addStream(stream: StreamOptions, defaultLevel?: number | string): void;
