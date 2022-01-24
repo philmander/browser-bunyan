@@ -4,11 +4,13 @@
  * Test the `log.level(...)`.
  */
 
-import { createLogger, FATAL, ERROR, INFO, DEBUG, TRACE } from '../src/index';
+import { createLogger, FATAL, ERROR, INFO, DEBUG, TRACE } from '../src/index.js';
 
 var p = console.log;
 
-import { test, beforEach as before, afterEach as after } from "babel-tap";
+import { test, beforeEach as before, afterEach as after } from "tap";
+
+const __dirname = new URL('.', import.meta.url).pathname;
 
 // ---- test boolean `log.<level>()` calls
 

@@ -4,15 +4,9 @@
  * Test the standard serializers in Bunyan.
  */
 
-import { createLogger, stdSerializers } from '../src/index';
+import { createLogger, stdSerializers } from '../src/index.js';
 
-var http = require('http');
-
-var verror = require('verror');
-
-import { Logger, test, beforEach as before, afterEach as after } from "babel-tap";
-
-
+import { test, beforeEach as before, afterEach as after } from "tap";
 
 function CapturingStream(recs) {
     this.recs = recs;
@@ -96,89 +90,6 @@ test('err serializer: custom serializer', function (t) {
         t.equal(records[i].err.message, errs[i].message);
         t.equal(records[i].err.beep, errs[i].beep);
     }
-    t.end();
-});
-
-test('err serializer: long stack', function (t) {
-    var records = [];
-    var log = createLogger({
-        name: 'serializer-test',
-        streams: [ {
-                stream: new CapturingStream(records),
-                type: 'raw'
-        } ],
-        serializers: {
-            err: stdSerializers.err
-        }
-    });
-
-    var topErr, midErr, bottomErr;
-
-    // Just a VError.
-    topErr = new verror.VError('top err');
-    log.info(topErr, 'the error');
-    var lastRecord = records[records.length-1];
-    t.equal(lastRecord.err.message, topErr.message, 'Just a VError');
-    t.equal(lastRecord.err.name, topErr.name, 'Just a VError');
-    t.equal(lastRecord.err.stack, topErr.stack, 'Just a VError');
-
-    // Just a WError.
-    topErr = new verror.WError('top err');
-    log.info(topErr, 'the error');
-    var lastRecord = records[records.length-1];
-    t.equal(lastRecord.err.message, topErr.message, 'Just a WError');
-    t.equal(lastRecord.err.name, topErr.name, 'Just a WError');
-    t.equal(lastRecord.err.stack, topErr.stack, 'Just a WError');
-
-    // WError <- TypeError
-    bottomErr = new TypeError('bottom err');
-    topErr = new verror.WError(bottomErr, 'top err');
-    log.info(topErr, 'the error');
-    var lastRecord = records[records.length-1];
-    t.equal(lastRecord.err.message, topErr.message, 'WError <- TypeError');
-    t.equal(lastRecord.err.name, topErr.name, 'WError <- TypeError');
-    var expectedStack = topErr.stack + '\nCaused by: ' + bottomErr.stack;
-    t.equal(lastRecord.err.stack, expectedStack, 'WError <- TypeError');
-
-    // WError <- WError
-    bottomErr = new verror.WError('bottom err');
-    topErr = new verror.WError(bottomErr, 'top err');
-    log.info(topErr, 'the error');
-    var lastRecord = records[records.length-1];
-    t.equal(lastRecord.err.message, topErr.message, 'WError <- WError');
-    t.equal(lastRecord.err.name, topErr.name, 'WError <- WError');
-    var expectedStack = topErr.stack + '\nCaused by: ' + bottomErr.stack;
-    t.equal(lastRecord.err.stack, expectedStack, 'WError <- WError');
-
-    // WError <- WError <- TypeError
-    bottomErr = new TypeError('bottom err');
-    midErr = new verror.WError(bottomErr, 'mid err');
-    topErr = new verror.WError(midErr, 'top err');
-    log.info(topErr, 'the error');
-    var lastRecord = records[records.length-1];
-    t.equal(lastRecord.err.message, topErr.message,
-        'WError <- WError <- TypeError');
-    t.equal(lastRecord.err.name, topErr.name, 'WError <- WError <- TypeError');
-    var expectedStack = (topErr.stack
-        + '\nCaused by: ' + midErr.stack
-        + '\nCaused by: ' + bottomErr.stack);
-    t.equal(lastRecord.err.stack, expectedStack,
-            'WError <- WError <- TypeError');
-
-    // WError <- WError <- WError
-    bottomErr = new verror.WError('bottom err');
-    midErr = new verror.WError(bottomErr, 'mid err');
-    topErr = new verror.WError(midErr, 'top err');
-    log.info(topErr, 'the error');
-    var lastRecord = records[records.length-1];
-    t.equal(lastRecord.err.message, topErr.message,
-        'WError <- WError <- WError');
-    t.equal(lastRecord.err.name, topErr.name, 'WError <- WError <- WError');
-    var expectedStack = (topErr.stack
-        + '\nCaused by: ' + midErr.stack
-        + '\nCaused by: ' + bottomErr.stack);
-    t.equal(lastRecord.err.stack, expectedStack, 'WError <- WError <- WError');
-
     t.end();
 });
 

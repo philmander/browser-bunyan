@@ -4,8 +4,8 @@
  * Test type checking on creation of the Logger.
  */
 
-import { Logger, createLogger } from '../src/index';
-import { test, beforEach as before, afterEach as after } from "babel-tap";
+import { Logger, createLogger } from '../src/index.js';
+import { test, beforeEach as before, afterEach as after } from "tap";
 
 test('ensure Logger creation options', function (t) {
     t.throws(function () { new Logger(); },

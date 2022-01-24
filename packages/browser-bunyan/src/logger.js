@@ -1,5 +1,5 @@
 import { TRACE, DEBUG, INFO, WARN, ERROR, FATAL, nameFromLevel, resolveLevel} from '@browser-bunyan/levels';
-import { format, _haveWarned, _warn, extractSrcFromStacktrace, _indent, objCopy, safeCycles, CALL_STACK_ERROR } from './util';
+import { format, _haveWarned, _warn, extractSrcFromStacktrace, _indent, objCopy, safeCycles, CALL_STACK_ERROR } from './util.js';
 import { ConsoleRawStream } from '@browser-bunyan/console-raw-stream';
 
 const LOG_VERSION = 1;

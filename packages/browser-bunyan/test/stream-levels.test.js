@@ -5,8 +5,8 @@
  * a Logger instance) get the appropriate level.
  */
 
-import { createLogger, FATAL, ERROR, INFO, DEBUG, TRACE } from '../src/index';
-import { test, beforEach as before, afterEach as after } from "babel-tap";
+import { createLogger, FATAL, ERROR, INFO, DEBUG, TRACE } from '../src/index.js';
+import { test, beforeEach as before, afterEach as after } from "tap";
 
 // ---- Tests
 

@@ -19,14 +19,14 @@ export {
     stdSerializers,
     Logger,
     createLogger,
-} from './logger';
+} from './logger.js';
 
 export {
     // Useful for custom `type == 'raw'` streams that may do JSON stringification
     // of log records themselves. Usage:
     //    const str = JSON.stringify(rec, bunyan.safeCycles());
     safeCycles,
-} from './util';
+} from './util.js';
 
 //streams
 export { ConsoleFormattedStream } from '@browser-bunyan/console-formatted-stream';

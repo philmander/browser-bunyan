@@ -4,13 +4,11 @@
  * Test the `log.trace(...)`, `log.debug(...)`, ..., `log.fatal(...)` API.
  */
 
-import { createLogger } from '../src/index';
-import { format } from '../src/util';
-import { test, beforEach as before, afterEach as after } from "babel-tap";
+import { createLogger } from '../src/index.js';
+import { format } from '../src/util.js';
+import { test, beforeEach as before, afterEach as after } from "tap";
 
-
-var p = console.log;
-
+const __dirname = new URL('.', import.meta.url).pathname;
 
 // ---- test boolean `log.<level>()` calls
 

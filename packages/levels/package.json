@@ -5,7 +5,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "./lib/index.js",
+  "type": "module",
+  "main": "./lib/index.cjs",
   "module": "./lib/index.m.js",
   "typings": "./lib/index.d.ts",
   "scripts": {

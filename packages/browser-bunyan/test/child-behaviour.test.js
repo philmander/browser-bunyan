@@ -4,8 +4,8 @@
  * Test some `<Logger>.child(...)` behaviour.
  */
 
-import { createLogger } from '../src/index';
-import { test, beforEach as before, afterEach as after } from "babel-tap";
+import { createLogger } from '../src/index.js';
+import { test, beforeEach as before, afterEach as after } from "tap";
 
 function CapturingStream(recs) {
     this.recs = recs || [];

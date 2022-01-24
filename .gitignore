@@ -4,6 +4,7 @@
 /*.tgz
 .idea
 .DS_Store
+.nyc_output
 
 dist
 lib

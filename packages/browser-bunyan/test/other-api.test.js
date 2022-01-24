@@ -4,10 +4,9 @@
  * Test other parts of the exported API.
  */
 
-import { resolveLevel, FATAL, ERROR, WARN, INFO, DEBUG, TRACE } from '../src/index';
+import { resolveLevel, FATAL, ERROR, WARN, INFO, DEBUG, TRACE } from '../src/index.js';
 
-import { test, beforEach as before, afterEach as after } from "babel-tap";
-
+import { test, beforeEach as before, afterEach as after } from "tap";
 
 
 test('<LEVEL>s', function (t) {

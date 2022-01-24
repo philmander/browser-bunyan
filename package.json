@@ -21,12 +21,12 @@
     "release": "lerna publish"
   },
   "devDependencies": {
-    "babel-tap": "^5.0.0",
     "eslint": "^8.7.0",
     "lerna": "^4.0.0",
     "microbundle": "^0.14.2",
     "mkdirp": "^1.0.4",
-    "mock-xmlhttprequest": "^7.0.4"
+    "mock-xmlhttprequest": "^7.0.4",
+    "tap": "^15.1.6"
   },
   "licenses": [
     {

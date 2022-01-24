@@ -4,9 +4,9 @@
  * Test `type: 'raw'` Logger streams.
  */
 
-import { Logger } from '../src/index';
+import { Logger } from '../src/index.js';
 
-import { test, beforEach as before, afterEach as after } from "babel-tap";
+import { test, beforeEach as before, afterEach as after } from "tap";
 
 
 

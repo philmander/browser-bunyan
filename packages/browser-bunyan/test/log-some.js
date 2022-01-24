@@ -3,7 +3,7 @@
 // to stdout or stderr because this is used for dtrace testing
 // and we don't want to mix output.
 
-import { createLogger } from '../src/index';
+import { createLogger } from '../src/index.js';
 
 var log = createLogger({
         name: 'play',
