@@ -1,6 +1,6 @@
 {
   "name": "browser-bunyan",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Bunyan logging specifically for the browser",
   "author": "Phil Mander <philip.mander@gmail.com>",
   "repository": {
@@ -26,10 +26,10 @@
     "test": "../../node_modules/.bin/tap test/*.test.js"
   },
   "dependencies": {
-    "@browser-bunyan/console-formatted-stream": "^1.6.4",
-    "@browser-bunyan/console-plain-stream": "^1.6.0",
-    "@browser-bunyan/console-raw-stream": "^1.6.0",
-    "@browser-bunyan/levels": "^1.6.0"
+    "@browser-bunyan/console-formatted-stream": "^1.8.0",
+    "@browser-bunyan/console-plain-stream": "^1.8.0",
+    "@browser-bunyan/console-raw-stream": "^1.8.0",
+    "@browser-bunyan/levels": "^1.8.0"
   },
   "licenses": [
     {

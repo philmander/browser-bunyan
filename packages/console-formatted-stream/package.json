@@ -1,6 +1,6 @@
 {
   "name": "@browser-bunyan/console-formatted-stream",
-  "version": "1.6.4",
+  "version": "1.8.0",
   "description": "Bunyan stream for outputting nicely formatted records to the browser console",
   "publishConfig": {
     "access": "public"
@@ -28,7 +28,7 @@
     "formatted"
   ],
   "dependencies": {
-    "@browser-bunyan/levels": "^1.6.0"
+    "@browser-bunyan/levels": "^1.8.0"
   },
   "author": "Phil Mander",
   "license": "MIT",
