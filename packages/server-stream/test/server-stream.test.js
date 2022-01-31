@@ -20,6 +20,7 @@ import { ServerStream } from '../src/index.js';
 import { setTimeout } from 'timers/promises';
 
 import MockXMLHttpRequest from 'mock-xmlhttprequest';
+import { resolve } from "path";
 
 const MockXhr = MockXMLHttpRequest.newMockXhr();
 global.XMLHttpRequest = MockXhr;
@@ -130,5 +131,40 @@ test('custom xhr error handler', async function (t) {
         });
         stream.write({ msg: 'one' });
     });
+    return end;
+});
+
+test('add custom request headers', async function (t) {
+    const end = new Promise((resolve) => {
+        MockXhr.onSend = xhr => {
+            t.equal(xhr.requestHeaders.getAll().trim(), 'authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==\r\ncontent-type: application/json');
+            resolve();
+        };
+    });
+
+    const stream = new ServerStream({
+        headers: {
+            'Authorization': 'Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==',
+        }
+    });
+    stream.write({ foo: 'bar' });
+    return end;
+});
+
+test('add custom request headers: override content-type', async function (t) {
+    const end = new Promise((resolve) => {
+        MockXhr.onSend = xhr => {
+            t.equal(xhr.requestHeaders.getAll().trim(), 'authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==\r\ncontent-type: text/json');
+            resolve();
+        };
+    });
+
+    const stream = new ServerStream({
+        headers: {
+            'Authorization': 'Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==',
+            'Content-Type': 'text/json',
+        }
+    });
+    stream.write({ foo: 'bar' });
     return end;
 });

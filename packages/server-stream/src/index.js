@@ -1,12 +1,15 @@
 const userAgent = typeof window !== 'undefined' ? window.navigator.userAgent : 'no-window';
 const isBot = /bot|crawler|spider|crawling/i.test(userAgent);
 
+const defaultHeaders = { 'Content-Type': 'application/json' };
+
 export class ServerStream {
 
     constructor(opts = {}) {
         const {
             method = 'PUT',
             url = '/log',
+            headers = {},
             throttleInterval = 3000,
             withCredentials = false,
             onError,
@@ -16,6 +19,8 @@ export class ServerStream {
 
         this.writeCondition = writeCondition;
         this.records = {};
+
+        this.headers = { ...defaultHeaders, ...headers };
 
         this.start({ method, url, throttleInterval, withCredentials, onError });
 
@@ -33,9 +38,7 @@ export class ServerStream {
                     window.fetch(url, {
                         method,
                         body: JSON.stringify(recs),
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
+                        headers: this.headers,
                         credentials: withCredentials ? 'include' : 'same-origin',
                         mode: 'cors',
                         keepalive: true,
@@ -66,7 +69,9 @@ export class ServerStream {
                         }
                     };
                     xhr.open(method, url);
-                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    for (const [name, value] of Object.entries(this.headers)) {
+                        xhr.setRequestHeader(name, value);
+                    }
                     xhr.withCredentials = withCredentials;
                     xhr.send(JSON.stringify(recs));
                 } else {

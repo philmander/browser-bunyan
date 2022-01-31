@@ -239,10 +239,11 @@ be sent. By default, log records will not be sent if the browser is offline
 
 | Option              | Default    | Description |
 | ------------------- |----------- | ------------------------------------------------- |
-| `url`               | /log       | Endpoint to send log record batches to (as JSON) |
-| `method`            | PUT        | HTTP method to send record payload with |
+| `url`               | `/log`       | Endpoint to send log record batches to (as JSON) |
+| `method`            | `PUT`        | HTTP method to send record payload with |
+| `headers`           | `{ Content-Type': 'application/json }` | Custom HTTP request headers (in addition to the default) |
 | `withCredentials`   | `false`    | `withCredentials` property of the underlying `XMLHttpRequest` object |
-| `throttleInterval`  | 3000       | How often to send log record batches (ms) |
+| `throttleInterval`  | `3000`       | How often to send log record batches (ms) |
 | `writeCondition`    | `ServerLogStream.defaultWriteCondition` | A function which must return a boolean. `true` if the log record can be written. i.e. included in the next batch to send. |
 | `onError`           | -          | A handler function to invoke if the send request fails |
 | `flushOnClose`      | `false`    | **Experimental** Send unsent log records if the browser window is closed |

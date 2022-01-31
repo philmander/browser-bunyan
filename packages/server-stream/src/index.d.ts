@@ -3,6 +3,7 @@ import { LogStream } from '@browser-bunyan/levels';
 type ServerStreamOpts = {
     method?: string,
     url?: string,
+    headers?: Object,
     throttleInterval?: number,
     withCredentials?: boolean,
     onError?: Function,
