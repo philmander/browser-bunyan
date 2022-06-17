@@ -226,11 +226,11 @@ be sent. By default, log records will not be sent if the browser is offline
 (`navigator.onLine === false`) or the current user agent is determined to be a bot/crawler. You may add your own write conditions in addition to the default conditions like so:
 
   ```javascript
-  new ServerLogStream({
+  new ServerStream({
      url: '/client-log',
      method: 'POST',
      writeCondition: record => {
-        return ServerLogStream.defaultWriteCondition() && record.msg !== 'GrikkleGrass';
+        return ServerStream.defaultWriteCondition() && record.msg !== 'GrikkleGrass';
      },
   })
   ```
