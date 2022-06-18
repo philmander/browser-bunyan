@@ -11,4 +11,6 @@ export interface LogStream {
     write(record: object): void;
 }
 
+export const nameFromLevel: Record<string, 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal' | undefined>;
+
 export function resolveLevel(nameOrNum: string | number): number
