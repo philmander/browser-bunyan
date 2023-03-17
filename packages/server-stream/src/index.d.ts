@@ -16,7 +16,7 @@ export declare class ServerStream implements LogStream {
     currentThrottleTimeout: number | undefined;
     writeCondition: ((record?: object) => boolean) | undefined;
     records: object | undefined;
-    headers: { [header: string]: string };
+    headers: { [header: string]: string } | undefined;
 
     constructor(opts?: ServerStreamOpts);
 
