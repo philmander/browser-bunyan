@@ -12,3 +12,7 @@ export interface LogStream {
 }
 
 export function resolveLevel(nameOrNum: string | number): number
+
+export type LevelName = 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal';
+export const levelFromName: Record<LevelName, number>;
+export const nameFromLevel: Record<number, LevelName>;
