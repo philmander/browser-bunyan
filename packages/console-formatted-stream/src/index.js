@@ -1,4 +1,4 @@
-import { TRACE, DEBUG, INFO, WARN, ERROR, FATAL, nameFromLevel } from '@browser-bunyan/levels';
+import { TRACE, DEBUG, INFO, WARN, ERROR, FATAL } from '@browser-bunyan/levels';
 const DEFAULT_CSS = {
     levels: {
         trace: 'color: DeepPink',
@@ -29,7 +29,7 @@ export class ConsoleFormattedStream {
         const loggerName = rec.childName ? rec.name + '/' + rec.childName : rec.name;
 
         //get level name and pad start with spacs
-        let levelName = nameFromLevel[rec.level];
+        let levelName = rec.levelName || 'info';
         const formattedLevelName = (Array(6 - levelName.length).join(' ') + levelName).toUpperCase();
 
         if (this.logByLevel) {
